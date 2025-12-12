@@ -10,6 +10,19 @@
     box-sizing: border-box;
 }
 
+/* Global smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-x: hidden;
+    background: #ffffff;
+    color: #1a365d;
+    line-height: 1.6;
+}
+
 /* Only apply these styles to the landing page */
 .landing-page {
     width: 100%;
@@ -20,12 +33,8 @@
     scroll-behavior: smooth;
     position: relative;
     -webkit-overflow-scrolling: touch;
-    /* Smooth scrolling on iOS */
-}
-
-/* Hide body scrollbar only on landing page */
-body.landing-active {
-    overflow: hidden;
+    scroll-padding-top: 80px;
+    /* Account for fixed header */
 }
 
 /* Particle Canvas Container */
@@ -49,6 +58,13 @@ body.landing-active {
     width: 100%;
     position: relative;
     overflow: hidden;
+}
+
+/* Improve scroll performance */
+.scroll-snap-item {
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 /* Custom scrollbar for landing page only */
@@ -79,19 +95,23 @@ body.landing-active {
     width: 100%;
     z-index: 1000;
     padding: 1.5rem 0;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(59, 130, 246, 0.1);
     animation: slideDown 0.8s ease-out;
+    height: 80px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 @keyframes slideDown {
     from {
         transform: translateY(-100%);
+        opacity: 0;
     }
 
     to {
         transform: translateY(0);
+        opacity: 1;
     }
 }
 
@@ -102,6 +122,7 @@ body.landing-active {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 100%;
 }
 
 .logo {
@@ -151,6 +172,8 @@ body.landing-active {
     background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
     overflow: hidden;
     height: 100vh;
+    padding-top: 80px;
+    /* Account for fixed header */
 }
 
 /* Animated Gradient Background */
@@ -204,7 +227,8 @@ body.landing-active {
     animation:
         float 6s ease-in-out infinite,
         subtlePulse 3s ease-in-out infinite alternate;
-    transition: all 0.5s ease;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0);
 }
 
 .bot-image:hover {
@@ -271,17 +295,22 @@ body.landing-active {
     display: inline-block;
     opacity: 0;
     transform-origin: center bottom;
+    animation-fill-mode: forwards;
 }
 
+/* TYPING CURSOR EFFECT - KEPT AS REQUESTED */
 .typing-cursor {
     display: inline-block;
-    width: 3px;
+    width: 4px;
     height: 1.2em;
-    background: #3b82f6;
-    margin-left: 2px;
+    background: linear-gradient(to bottom, #3b82f6, #1d4ed8);
+    margin-left: 4px;
     vertical-align: middle;
-    animation: cursorBlink 1s infinite;
+    animation: cursorBlink 1.2s infinite;
     opacity: 0;
+    transform: translateZ(0);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    border-radius: 1px;
 }
 
 .typing-cursor.is-blinking {
@@ -293,11 +322,13 @@ body.landing-active {
     0%,
     50% {
         opacity: 1;
+        transform: scaleY(1);
     }
 
     51%,
     100% {
-        opacity: 0;
+        opacity: 0.3;
+        transform: scaleY(0.8);
     }
 }
 
@@ -322,7 +353,7 @@ body.landing-active {
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     transform-style: preserve-3d;
     perspective: 500px;
     position: relative;
@@ -330,6 +361,7 @@ body.landing-active {
     box-shadow:
         0 10px 30px rgba(59, 130, 246, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: translateZ(0);
 }
 
 .hero-cta-btn::before {
@@ -339,14 +371,14 @@ body.landing-active {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
     transition: left 0.7s ease;
 }
 
 .hero-cta-btn:hover {
-    transform: translateY(-3px) rotateX(5deg);
+    transform: translateY(-3px) rotateX(5deg) scale(1.02);
     box-shadow:
-        0 15px 40px rgba(59, 130, 246, 0.4),
+        0 20px 40px rgba(59, 130, 246, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
@@ -355,18 +387,31 @@ body.landing-active {
 }
 
 .hero-cta-btn:active {
-    transform: translateY(-1px);
+    transform: translateY(-1px) scale(0.98);
 }
 
 /* ============================================
-   FEATURES SECTION
+   FEATURES SECTION - FIXED FOR VISIBILITY
 ============================================ */
 .features-section {
     background: #ffffff;
     position: relative;
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
     display: flex;
     align-items: center;
+    justify-content: center;
+    padding: 100px 0;
+}
+
+.features-section .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-top: 60px;
+    /* Space for header */
 }
 
 .features-section::before {
@@ -383,7 +428,7 @@ body.landing-active {
 }
 
 .section-title {
-    font-size: 3rem;
+    font-size: 3.2rem;
     font-weight: 800;
     text-align: center;
     margin-bottom: 4rem;
@@ -392,33 +437,38 @@ body.landing-active {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     opacity: 0;
+    padding: 0 2rem;
+    line-height: 1.2;
+    max-width: 900px;
 }
 
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
+    width: 100%;
 }
 
 /* 3D Card with Hover Effects */
 .feature-card {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(59, 130, 246, 0.1);
-    border-radius: 20px;
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    border-radius: 24px;
     padding: 2.5rem;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     transform-style: preserve-3d;
     perspective: 1000px;
     position: relative;
     overflow: hidden;
     opacity: 0;
     box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        0 15px 35px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    transform: translateZ(0);
 }
 
 .feature-card::before {
@@ -428,17 +478,17 @@ body.landing-active {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), transparent);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), transparent);
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.4s ease;
 }
 
 .feature-card:hover {
-    transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+    transform: translateY(-12px) rotateX(5deg) rotateY(5deg) scale(1.02);
     box-shadow:
-        0 25px 50px rgba(59, 130, 246, 0.15),
-        0 5px 15px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        0 30px 60px rgba(59, 130, 246, 0.15),
+        0 10px 20px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
     border-color: rgba(59, 130, 246, 0.3);
 }
 
@@ -447,51 +497,59 @@ body.landing-active {
 }
 
 .feature-icon-wrapper {
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
     background: linear-gradient(135deg, #3b82f6, #60a5fa);
-    border-radius: 18px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1.5rem;
-    transition: all 0.3s ease;
+    margin-bottom: 2rem;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     transform-style: preserve-3d;
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
 }
 
 .feature-card:hover .feature-icon-wrapper {
     transform: rotateY(180deg) scale(1.1);
     background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+    box-shadow: 0 15px 30px rgba(29, 78, 216, 0.3);
 }
 
 .feature-icon-wrapper svg {
     color: white;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
+    transition: transform 0.5s ease;
+}
+
+.feature-card:hover .feature-icon-wrapper svg {
+    transform: scale(1.1);
 }
 
 .feature-title {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 700;
     color: #1e3a8a;
-    margin-bottom: 1rem;
+    margin-bottom: 1.2rem;
     transition: all 0.3s ease;
 }
 
 .feature-card:hover .feature-title {
     color: #3b82f6;
-    transform: translateX(5px);
+    transform: translateX(8px);
 }
 
 .feature-description {
     color: #475569;
-    line-height: 1.6;
+    line-height: 1.7;
     transition: all 0.3s ease;
+    font-size: 1.05rem;
 }
 
 .feature-card:hover .feature-description {
     color: #64748b;
-    transform: translateX(5px);
+    transform: translateX(8px);
 }
 
 /* ============================================
@@ -504,11 +562,21 @@ body.landing-active {
     justify-content: center;
     position: relative;
     overflow: hidden;
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
+    padding: 100px 0;
+}
+
+.tech-stack-section .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 60px;
 }
 
 .tech-stack-title {
-    font-size: 3rem;
+    font-size: 3.2rem;
     font-weight: 800;
     text-align: center;
     margin-bottom: 3rem;
@@ -517,6 +585,8 @@ body.landing-active {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     opacity: 0;
+    padding: 0 2rem;
+    line-height: 1.2;
 }
 
 /* Marquee with 3D Rotation */
@@ -526,12 +596,14 @@ body.landing-active {
     position: relative;
     opacity: 0;
     transform-style: preserve-3d;
+    padding: 20px 0;
 }
 
 .marquee-content {
     display: flex;
-    animation: marquee 30s linear infinite;
+    animation: marquee 40s linear infinite;
     will-change: transform;
+    gap: 2rem;
 }
 
 .marquee-content:hover {
@@ -550,27 +622,28 @@ body.landing-active {
 
 .tech-item {
     padding: 1.2rem 2.5rem;
-    margin: 0 1rem;
+    margin: 0;
     font-size: 1.2rem;
     font-weight: 600;
-    border-radius: 15px;
+    border-radius: 16px;
     white-space: nowrap;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     transform-style: preserve-3d;
     position: relative;
     cursor: pointer;
     box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        0 10px 25px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    transform: translateZ(0);
 }
 
 .tech-item::before {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 15px;
+    border-radius: 16px;
     padding: 2px;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), transparent);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.4), transparent);
     -webkit-mask:
         linear-gradient(#fff 0 0) content-box,
         linear-gradient(#fff 0 0);
@@ -580,13 +653,13 @@ body.landing-active {
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.4s ease;
 }
 
 .tech-item:hover {
-    transform: translateY(-5px) rotateX(10deg);
+    transform: translateY(-8px) rotateX(10deg) scale(1.05);
     box-shadow:
-        0 15px 35px rgba(59, 130, 246, 0.2),
+        0 20px 40px rgba(59, 130, 246, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
@@ -627,10 +700,11 @@ body.landing-active {
 
 .tech-separator {
     color: #cbd5e1;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     margin: 0 0.5rem;
     display: inline-flex;
     align-items: center;
+    opacity: 0.7;
 }
 
 /* ============================================
@@ -643,7 +717,17 @@ body.landing-active {
     justify-content: center;
     position: relative;
     overflow: hidden;
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
+    padding: 100px 0;
+}
+
+.guest-section .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 60px;
 }
 
 .guest-section::before {
@@ -675,6 +759,7 @@ body.landing-active {
     z-index: 2;
     max-width: 800px;
     opacity: 0;
+    padding: 0 2rem;
 }
 
 .section-title-light {
@@ -683,13 +768,17 @@ body.landing-active {
     color: white;
     margin-bottom: 1.5rem;
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    line-height: 1.2;
 }
 
 .guest-subtitle {
-    font-size: 1.25rem;
-    color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 3rem;
-    line-height: 1.6;
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 3.5rem;
+    line-height: 1.7;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .guest-buttons-container {
@@ -697,18 +786,19 @@ body.landing-active {
     gap: 2rem;
     justify-content: center;
     flex-wrap: wrap;
+    margin-top: 2rem;
 }
 
 /* Guest Buttons with Glass Effect */
 .guest-btn-primary,
 .guest-btn-secondary,
 .guest-btn-cta {
-    padding: 1.2rem 3rem;
-    font-size: 1.1rem;
+    padding: 1.3rem 3.2rem;
+    font-size: 1.15rem;
     font-weight: 600;
-    border-radius: 15px;
+    border-radius: 16px;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
     border: none;
@@ -718,32 +808,33 @@ body.landing-active {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    transform: translateZ(0);
 }
 
 .guest-btn-primary {
     background: rgba(255, 255, 255, 0.95);
     color: #1d4ed8;
     box-shadow:
-        0 15px 35px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        0 20px 40px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 .guest-btn-secondary {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.18);
     color: white;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.4);
     box-shadow:
-        0 15px 35px rgba(0, 0, 0, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .guest-btn-cta {
     background: linear-gradient(135deg, #10b981, #059669);
     color: white;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     box-shadow:
-        0 15px 35px rgba(16, 185, 129, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        0 20px 40px rgba(16, 185, 129, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .guest-btn-primary::before,
@@ -755,36 +846,36 @@ body.landing-active {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.7s ease;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .guest-btn-primary:hover,
 .guest-btn-secondary:hover,
 .guest-btn-cta:hover {
-    transform: translateY(-5px) rotateX(5deg);
+    transform: translateY(-8px) rotateX(5deg) scale(1.05);
 }
 
 .guest-btn-primary:hover {
     background: white;
     box-shadow:
-        0 25px 50px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        0 30px 60px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .guest-btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.7);
     box-shadow:
-        0 25px 50px rgba(0, 0, 0, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        0 30px 60px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .guest-btn-cta:hover {
     background: linear-gradient(135deg, #059669, #047857);
     box-shadow:
-        0 25px 50px rgba(16, 185, 129, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        0 30px 60px rgba(16, 185, 129, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .guest-btn-primary:hover::before,
@@ -796,6 +887,26 @@ body.landing-active {
 /* ============================================
    RESPONSIVE DESIGN
 ============================================ */
+@media (max-width: 1200px) {
+    .hero-title {
+        font-size: 3.5rem;
+    }
+
+    .bot-image {
+        width: 350px;
+        height: 350px;
+    }
+
+    .section-title,
+    .tech-stack-title {
+        font-size: 2.8rem;
+    }
+
+    .section-title-light {
+        font-size: 3rem;
+    }
+}
+
 @media (max-width: 1024px) {
     .hero-title {
         font-size: 3rem;
@@ -808,6 +919,17 @@ body.landing-active {
 
     .features-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    .section-title,
+    .tech-stack-title {
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .section-title-light {
+        font-size: 2.8rem;
     }
 }
 
@@ -816,18 +938,19 @@ body.landing-active {
     /* Disable scroll-snap on mobile for better UX */
     .landing-page {
         scroll-snap-type: none;
+        height: auto;
     }
 
     .scroll-snap-item {
         min-height: auto;
-        padding: 4rem 0;
         height: auto;
+        padding: 120px 0 80px;
     }
 
     .hero-content {
         margin: 0 auto;
         text-align: center;
-        padding: 0 2rem;
+        padding: 0 1.5rem;
     }
 
     .hero-floating-graphic {
@@ -835,33 +958,51 @@ body.landing-active {
         right: auto;
         top: auto;
         transform: none;
-        margin: 2rem auto;
+        margin: 3rem auto;
     }
 
     .bot-image {
-        width: 250px;
-        height: 250px;
+        width: 280px;
+        height: 280px;
     }
 
     .features-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
 
     .section-title,
     .tech-stack-title,
     .section-title-light {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
+        padding: 0 1.5rem;
+        margin-bottom: 2.5rem;
     }
 
     .guest-buttons-container {
         flex-direction: column;
         align-items: center;
+        gap: 1.5rem;
+    }
+
+    .features-section,
+    .tech-stack-section,
+    .guest-section {
+        padding: 120px 0 80px;
+    }
+
+    .feature-card {
+        padding: 2rem;
+    }
+
+    .hero-section {
+        padding-top: 100px;
     }
 }
 
 @media (max-width: 480px) {
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 2.4rem;
     }
 
     .hero-subtitle {
@@ -871,16 +1012,28 @@ body.landing-active {
     .section-title,
     .tech-stack-title,
     .section-title-light {
-        font-size: 2rem;
+        font-size: 1.9rem;
     }
 
     .feature-card {
-        padding: 2rem;
+        padding: 1.8rem;
     }
 
     .tech-item {
-        padding: 1rem 1.5rem;
+        padding: 1rem 1.8rem;
         font-size: 1rem;
+    }
+
+    .guest-btn-primary,
+    .guest-btn-secondary,
+    .guest-btn-cta {
+        padding: 1.2rem 2.5rem;
+        font-size: 1.05rem;
+    }
+
+    .bot-image {
+        width: 240px;
+        height: 240px;
     }
 }
 
@@ -891,5 +1044,19 @@ body.landing-active {
     padding: 0 2rem;
 }
 
-/* Remove global scrollbar hiding - keep for landing page only */
-/* The problematic lines have been removed */
+/* Performance optimizations */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure smooth transitions */
+.feature-card,
+.tech-item,
+.hero-cta-btn,
+.guest-btn-primary,
+.guest-btn-secondary,
+.guest-btn-cta,
+.bot-image {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}

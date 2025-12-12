@@ -14,8 +14,8 @@ const Navbar = () => {
           { path: "/dashboard", label: "Dashboard" },
           { path: "/courses", label: "Courses" },
           { path: "/focus", label: "Focus" },
-          { path: "/todolist", label: "Todolist" },
-          { path: "/aichatbot", label: "AI Chatbot" }
+          { path: "/todolist", label: "Productivity Tools" },
+          { path: "/aichatbot", label: "AI Tools" }
         ].map((link) => (
           <NavLink
             key={link.path}

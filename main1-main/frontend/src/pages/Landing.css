@@ -94,7 +94,7 @@ body {
     left: 0;
     width: 100%;
     z-index: 1000;
-    padding: 1.5rem 0;
+    padding: 2.5rem 0;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(59, 130, 246, 0.1);
@@ -172,7 +172,7 @@ body {
     background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
     overflow: hidden;
     height: 100vh;
-    padding-top: 80px;
+    padding-top: 100px;
     /* Account for fixed header */
 }
 

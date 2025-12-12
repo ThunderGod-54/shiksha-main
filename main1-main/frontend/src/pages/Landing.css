@@ -1,0 +1,490 @@
+/*
+ * Landing.css
+ * Contains all base styles, theme variables, media queries, and animation keyframes.
+ */
+
+/* --- Global Styles & Resets --- */
+:root {
+    --bg-primary: #1942baff;
+    --bg-secondary: #ffffff;
+    --text-primary: #080505ff;
+    --text-secondary: #dbeafe;
+
+    --card-bg: #f9fafb;
+    --card-text: #1f2937;
+
+    /* Bot interface colors */
+    --bot-stroke-color: #93c5fd;
+    --bot-fill-color: #bfdbfecf;
+}
+
+[data-theme="dark"] {
+    --bg-primary: #0d1117;
+    --bg-secondary: #161b22;
+
+    --text-primary: #e5e7eb;
+    --text-secondary: #9ca3af;
+
+    --card-bg: #1f2937;
+    --card-text: #e5e7eb;
+
+    /* Bot interface colors */
+    --bot-stroke-color: #60a5fa;
+    --bot-fill-color: #1e40afcf;
+}
+
+.landing-page {
+    min-height: 100vh;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Re-usable container class */
+.container {
+    width: 100%;
+    max-width: 1100px;
+    /* Equivalent to max-w-6xl */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    /* 24px */
+    padding-right: 1.5rem;
+    /* 24px */
+}
+
+/* Targeting buttons within .landing-page */
+.landing-page button {
+    cursor: pointer;
+    font-family: inherit;
+    border: none;
+    border-radius: 9999px;
+    /* rounded-full */
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+/* --- 1. Header/Navbar --- */
+.landing-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.landing-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.logo {
+    font-size: 1.875rem;
+    /* text-3xl */
+    font-weight: 700;
+    color: #fff;
+}
+
+.logo-span {
+    color: #60a5fa;
+    /* text-blue-400 */
+}
+
+/* --- Animation Utilities & Cursor --- */
+.hero-title .word {
+    white-space: nowrap;
+    /* Prevent words from breaking */
+    display: inline-block;
+}
+
+/* Hides individual characters initially for the typing effect */
+.hero-title .char {
+    opacity: 0;
+    display: inline-block;
+    /* Required for the character to respect spacing */
+}
+
+/* CSS for the blinking cursor */
+.typing-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.2em;
+    background-color: white;
+    margin-left: 5px;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+/* This is toggled by JS after typing animation is complete */
+.typing-cursor.is-blinking {
+    animation: cursorBlink 1s infinite step-end;
+}
+
+@keyframes cursorBlink {
+
+    0%,
+    100% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Animation for the floating graphic */
+@keyframes botFloatAnimation {
+    0% {
+        transform: translateY(0px) scale(1);
+    }
+
+    50% {
+        transform: translateY(-15px) scale(1.02);
+    }
+
+    100% {
+        transform: translateY(0px) scale(1);
+    }
+}
+
+/* Animation for the tech stack marquee */
+@keyframes marqueeAnimation {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* * NOTE: The old @keyframes barPulse was removed as the SVG bot 
+ * graphic, which used it, has been replaced by an image. 
+ */
+
+
+/* --- 2. Hero Section --- */
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 5rem;
+    padding-bottom: 8rem;
+    overflow: hidden;
+}
+
+.hero-gradient {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(to bottom, #3b82f6, #2563eb, #1e3a8a);
+    opacity: 0.9;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: left;
+    max-width: 50%;
+    padding-left: 1.5rem;
+}
+
+/* Floating Graphic Style (Bot Image) */
+.hero-floating-graphic {
+    display: none;
+    position: absolute;
+    top: 25%;
+    right: 15%;
+    width: 320px;
+    height: 280px;
+    z-index: 0;
+    animation: botFloatAnimation 8s ease-in-out infinite;
+    opacity: 0.95;
+    transform-origin: center;
+}
+
+/* ⭐️ STYLE ADDED FOR THE IMPORTED IMAGE (.bot-image class) */
+.hero-floating-graphic .bot-image {
+    width: 175%;
+    height: 175%;
+    object-fit: contain;
+    /* Ensures the whole image is visible and scaled correctly */
+}
+
+
+.hero-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    color: #fff;
+    /* White color for visibility */
+}
+
+.hero-title-span {
+    color: #93c5fd;
+}
+
+.hero-subtitle {
+    font-size: 1.125rem;
+    color: #dbeafe;
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+    max-width: 48rem;
+}
+
+.hero-cta-btn {
+    padding: 0.75rem 2rem;
+    background-color: #fff;
+    color: #1d4ed8;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    transform: scale(1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-cta-btn:hover {
+    background-color: #f9fafb;
+    transform: scale(1.05);
+}
+
+/* --- 3. Features Section --- */
+.features-section {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    background-color: var(--bg-secondary);
+    color: var(--card-text);
+}
+
+.section-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+}
+
+.feature-card {
+    background-color: #f9fafb;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-0.5rem);
+}
+
+.feature-icon-wrapper {
+    width: 4rem;
+    height: 4rem;
+    background-color: #dbeafe;
+    color: #2563eb;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+}
+
+.feature-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.feature-description {
+    color: #4b5563;
+}
+
+/* --- 3.5. Tech Stack Section --- */
+.tech-stack-section {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    background-color: #1e3a8a;
+    color: #fff;
+    overflow: hidden;
+
+}
+
+.tech-stack-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 4rem;
+    color: #fff;
+}
+
+.marquee-wrapper {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    white-space: nowrap;
+}
+
+.marquee-wrapper::before,
+.marquee-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100px;
+    z-index: 2;
+}
+
+.marquee-wrapper::before {
+    left: 0;
+    background: linear-gradient(to right, #1e3a8a, transparent);
+}
+
+.marquee-wrapper::after {
+    right: 0;
+    background: linear-gradient(to left, #1e3a8a, transparent);
+}
+
+.marquee-content {
+    display: inline-block;
+    animation: marqueeAnimation 30s linear infinite;
+}
+
+.tech-item {
+    display: inline-block;
+    padding: 1rem 2rem;
+    margin: 0 1rem;
+    border-radius: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    background-color: #1e40af;
+    border: 1px solid #2563eb;
+    color: #fff;
+}
+
+/* Tech-specific colors for flair */
+.tech-item.vite {
+    color: #61DAFB;
+}
+
+.tech-item.python {
+    color: #FFD43B;
+}
+
+.tech-item.opencv {
+    color: #5CDB95;
+}
+
+.tech-item.sql {
+    color: #F0A356;
+}
+
+
+/* --- 4. Guest View Section --- */
+.guest-section {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    background-color: var(--bg-secondary);
+    color: var(--card-text);
+}
+
+.guest-content {
+    text-align: center;
+}
+
+.section-title-light {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.guest-subtitle {
+    font-size: 1.125rem;
+    color: #4b5563;
+    margin-bottom: 2.5rem;
+    max-width: 42rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.guest-buttons-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.guest-btn-primary,
+.guest-btn-secondary {
+    padding: 0.75rem 2.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.guest-btn-primary {
+    background-color: #2563eb;
+    color: #fff;
+}
+
+.guest-btn-primary:hover {
+    background-color: #1d4ed8;
+}
+
+.guest-btn-secondary {
+    background-color: transparent;
+    border: 2px solid #2563eb;
+    color: #2563eb;
+}
+
+.guest-btn-secondary:hover {
+    background-color: #2563eb;
+    color: #fff;
+}
+
+/* --- Responsive Media Queries --- */
+
+/* sm: (640px) */
+@media (min-width: 640px) {
+    .guest-buttons-container {
+        flex-direction: row;
+    }
+}
+
+/* md: (768px) */
+@media (min-width: 768px) {
+    .hero-title {
+        font-size: 3.75rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.5rem;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .hero-content {
+        max-width: 60%;
+    }
+}
+
+/* lg: (1024px) */
+@media (min-width: 1024px) {
+    .hero-floating-graphic {
+        display: block;
+    }
+
+    .hero-content {
+        max-width: 50%;
+    }
+}

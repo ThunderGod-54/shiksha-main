@@ -1,0 +1,65 @@
+/* -----------------------------------
+   FOOTER (Light + Dark support)
+------------------------------------*/
+.app-footer {
+  background: var(--card);
+  color: var(--text);
+  border-top: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  text-align: center;
+  padding: 18px 10px;
+  backdrop-filter: blur(18px);
+  font-family: Inter, system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.brand {
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+/* Links row */
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.footer-links span {
+  opacity: 0.45;
+}
+
+/* Fancy animated underline */
+.footer-links a {
+  text-decoration: none;
+  color: var(--text);
+  position: relative;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.footer-links a::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 0%;
+  left: 0;
+  bottom: -3px;
+  background: var(--overlay);
+  transition: width 0.25s ease;
+  border-radius: 3px;
+}
+
+.footer-links a:hover {
+  color: var(--overlay);
+}
+
+.footer-links a:hover::after {
+  width: 100%;
+}

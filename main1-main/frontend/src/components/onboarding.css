@@ -1,0 +1,249 @@
+/* ===========================
+   GLOBAL THEME VARIABLES
+   =========================== */
+:root {
+  --bg: #f6f8fb;
+  --card-bg: #ffffff;
+  --text-primary: #1c1e21;
+  --text-secondary: #6b7280;
+  --border: rgba(0,0,0,0.12);
+  --shadow: 0 8px 28px rgba(0,0,0,0.08);
+  --accent: #007aff;
+  --accent-hover: #0063cc;
+  --error-bg: rgba(255, 99, 99, 0.1);
+  --error-text: #c62828;
+  --chip-bg: #eef3ff;
+  --chip-selected: #007aff15;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  --bg: #0f0f14;
+  --card-bg: #15151d;
+  --text-primary: #f1f3f5;
+  --text-secondary: #b4b4b4;
+  --border: rgba(255,255,255,0.08);
+  --shadow: 0 8px 28px rgba(0,0,0,0.52);
+  --chip-bg: #22242c;
+  --chip-selected: #007aff25;
+}
+
+/* ===========================
+   PAGE CONTAINER
+   =========================== */
+.onboard-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 20px;
+}
+
+/* ===========================
+   CARD
+   =========================== */
+.onboard-card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--card-bg);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 38px 36px;
+  border: 1px solid var(--border);
+  animation: fadeUp 0.45s ease;
+}
+
+.onboard-card h2 {
+  margin: 0 0 28px 0;
+  text-align: center;
+  font-size: 1.55rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ===========================
+   INPUT FIELD
+   =========================== */
+.input-box {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.input-box input,
+.input-box select {
+  width: 100%;
+  padding: 14px 14px;
+  border: 1.8px solid var(--border);
+  border-radius: 10px;
+  background: transparent;
+  font-size: 15px;
+  outline: none;
+  color: var(--text-primary);
+  transition: 0.25s ease;
+}
+
+.input-box input:focus,
+.input-box select:focus {
+  border-color: var(--accent);
+}
+
+/* Label floating */
+.input-box label {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  font-size: 15px;
+  color: var(--text-secondary);
+  pointer-events: none;
+  transition: 0.28s;
+}
+
+.input-box input:focus + label,
+.input-box input:not(:placeholder-shown) + label,
+.input-box select:focus + label,
+.input-box select:not([value=""]) + label {
+  top: -8px;
+  left: 10px;
+  font-size: 12px;
+  padding: 0 4px;
+  background: var(--card-bg);
+  color: var(--accent);
+}
+
+/* ===========================
+   SEGMENT SELECTOR
+   =========================== */
+.segment-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.segment-btn {
+  flex: 1;
+  padding: 11px 0;
+  text-align: center;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  color: var(--text-primary);
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.segment-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+/* ===========================
+   INTEREST CHIPS
+   =========================== */
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip {
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  background: var(--chip-bg);
+  cursor: pointer;
+  user-select: none;
+  border: 1.5px solid transparent;
+  transition: 0.25s;
+  color: var(--text-primary);
+}
+
+.chip.selected {
+  background: var(--chip-selected);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ===========================
+   SUBMIT BUTTON
+   =========================== */
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: 0.28s;
+}
+
+.submit-btn:hover:not(.disabled) {
+  background: var(--accent-hover);
+}
+
+.submit-btn.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===========================
+   ERROR BOX
+   =========================== */
+.error-box {
+  padding: 12px;
+  text-align: center;
+  border-radius: 10px;
+  background: var(--error-bg);
+  color: var(--error-text);
+  margin-bottom: 20px;
+  animation: slideDown 0.3s ease both;
+}
+
+/* ===========================
+   LOADER SCREEN
+   =========================== */
+.loader-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+}
+
+.loader-box {
+  padding: 35px;
+  border-radius: 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.spinner {
+  width: 42px;
+  height: 42px;
+  margin: 12px auto 0;
+  border: 4px solid var(--border);
+  border-top: 4px solid var(--accent);
+  border-radius: 50%;
+  animation: rotate 0.8s linear infinite;
+}
+
+/* Animations */
+@keyframes rotate {
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes slideDown {
+  0% { opacity: 0; transform: translateY(-6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(18px); }
+  100% { opacity: 1; transform: translateY(0); }
+}

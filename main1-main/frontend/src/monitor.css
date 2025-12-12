@@ -1,0 +1,205 @@
+/* =====================================
+   FOCUS MONITOR - GLOBAL THEME VERSION
+===================================== */
+
+/* Reset */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+}
+
+/* ================================
+   CONTAINER
+================================ */
+.monitor-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-main);
+  padding: 24px;
+}
+
+/* ================================
+   CARD
+================================ */
+.monitor-card {
+  width: 100%;
+  max-width: 700px;
+  height: 690px;
+
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 30px var(--shadow-color);
+
+  padding: 24px 18px;
+  text-align: center;
+}
+
+/* ================================
+   VIDEO FEED
+================================ */
+.monitor-video {
+  width: 100%;
+  height: 450px;
+  
+  border-radius: var(--radius-md);
+  background: #000;
+  object-fit: cover;
+  transform: scaleX(-1);
+
+  box-shadow: 0 6px 20px var(--shadow-color);
+
+  margin-bottom: 18px;
+}
+
+/* ================================
+   STATUS TAG
+================================ */
+.status {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  display: inline-block;
+  margin-bottom: 8px;
+  transition: 0.25s ease-in-out;
+}
+
+/* Status Mapping (uses global theme colors) */
+.status.ok {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #34d399;
+}
+
+.status.warn {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fbbf24;
+}
+
+.status.danger {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #f87171;
+}
+
+.status.idle {
+  background: #e2e8f0;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+}
+
+/* ================================
+   TIMER BOX
+================================ */
+.timer-box {
+  margin-top: 14px;
+  padding: 10px 12px;
+  
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+
+  box-shadow: 0 4px 18px var(--shadow-color);
+}
+
+/* ================================
+   PRESETS + BUTTONS
+================================ */
+.preset-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.preset-btn {
+  padding: 8px 14px;
+  font-weight: 600;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+
+  transition: 0.25s;
+}
+.preset-btn:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+/* CORE ACTION BUTTONS */
+.focus-btn,
+.end-btn,
+.pause-btn {
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: 0.25s ease;
+
+  background: var(--accent);
+  color: #fff;
+
+  box-shadow: 0 6px 18px var(--shadow-color);
+}
+
+.focus-btn:hover,
+.end-btn:hover,
+.pause-btn:hover {
+  background: var(--accent-strong);
+}
+
+/* ================================
+   DURING SESSION BUTTON ROW
+================================ */
+.session-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+  .monitor-card {
+    height: auto;
+    padding: 18px;
+  }
+
+  .monitor-video {
+    height: 380px;
+  }
+}
+
+@media (max-width: 480px) {
+  .monitor-video {
+    height: 300px;
+  }
+
+  .preset-row {
+    flex-wrap: wrap;
+  }
+
+  .session-controls {
+    flex-direction: column;
+  }
+}

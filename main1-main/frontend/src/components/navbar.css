@@ -1,0 +1,96 @@
+/* ---------------------------
+    NAVBAR Root
+----------------------------*/
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 14px 24px;
+
+  background: var(--nav);
+  border-bottom: 1px solid var(--border);
+
+  backdrop-filter: blur(14px);
+
+  box-shadow: var(--shadow);
+
+  z-index: 999;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+/* ---------------------------
+    LOGO
+----------------------------*/
+.logo {
+  font-size: 1.28rem;
+  font-weight: 800;
+  text-decoration: none;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  transition: color 0.2s ease;
+}
+
+.logo:hover {
+  color: var(--overlay);
+}
+
+/* ---------------------------
+    NAV LINKS WRAPPER
+----------------------------*/
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* ---------------------------
+    SINGLE NAV ITEM
+----------------------------*/
+.nav-item {
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.96rem;
+  font-weight: 500;
+
+  color: var(--text);
+  background: transparent;
+
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+/* Hover state */
+.nav-item:hover {
+  background: var(--hover);
+}
+
+/* Active route */
+.nav-item.active {
+  background: var(--overlay-soft);
+  color: var(--overlay);
+  font-weight: 600;
+}
+
+/* ---------------------------
+    Responsive
+----------------------------*/
+@media (max-width: 768px) {
+  .nav {
+    padding: 10px 16px;
+  }
+
+  .nav-links {
+    gap: 10px;
+  }
+
+  .nav-item {
+    padding: 6px 10px;
+    font-size: 0.88rem;
+  }
+}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import './aichatbot.css';
+
 // Typing suggestions component
 const TypingSuggestions = () => {
   const suggestions = ["Ask doubts", "Explain topics", "Tech concepts", "Math solutions", "History facts", "Science labs"];
@@ -832,19 +832,19 @@ export default function AIToolsPage() {
     <div style={{
       fontFamily: 'Inter, sans-serif',
       margin: 0,
-      background: ' var(--bg-main)',
+      background: '#f9fafb',
       minHeight: '100vh'
     }}>
       <style>{`
         * { box-sizing: border-box; }
-       
-        .ai-tools-page { padding: 40px; display: flex;align-items: center; flex-direction: column; }
+        
+        .ai-tools-page { padding: 40px; }
         .ai-title { font-size: 28px; margin-bottom: 24px; }
-        .ai-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; grid-direction: rtl; width: 100%; max-width: 1000px; }
-        .ai-card { background: var(--bg-card); border-radius: 16px; padding: 24px; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); border: 1px solid var(--border-color); }
+        .ai-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+        .ai-card { background: #ffffff; border-radius: 16px; padding: 24px; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); border: 1px solid #e5e7eb; }
         .ai-card:hover { transform: translateY(-6px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1); border-color: #2563eb; }
-        .ai-icon { font-size: 32px; margin-bottom: 10px; } 
-        .ai-card h3 { margin: 12px 0 6px; color: var(--text-primary); }
+        .ai-icon { font-size: 32px; margin-bottom: 10px; }
+        .ai-card h3 { margin: 12px 0 6px; color: #111827; }
         .ai-card p { color: #6b7280; font-size: 14px; line-height: 1.5; }
         
         .ai-modal-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.25); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 999; animation: fadeIn 0.3s ease; }
@@ -853,7 +853,7 @@ export default function AIToolsPage() {
         .ai-close:hover { background: #d1d5db; }
         
         .chat-layout { display: flex; height: 100%; min-height: 0; }
-        .chat-sidebar { width: 260px; background: var(--bg-card); border-right: 1px solid var(--border-color); padding: 18px; display: flex; flex-direction: column; overflow-y: auto; border: 2px solid var(--text-secondary);border-radius: 18px;}
+        .chat-sidebar { width: 260px; background: #ffffff; border-right: 1px solid #e5e7eb; padding: 20px; display: flex; flex-direction: column; overflow-y: auto; }
         .new-chat { width: 100%; padding: 12px; border: none; border-radius: 10px; background: #2563eb; color: white; cursor: pointer; font-weight: 500; margin-bottom: 20px; transition: background 0.2s; }
         .new-chat:hover { background: #1d4ed8; }
         .chat-history { flex: 1; overflow-y: auto; }
@@ -864,7 +864,7 @@ export default function AIToolsPage() {
         .session-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
         .session-title { flex: 1; font-size: 14px; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .rename-form { flex: 1; margin-right: 8px; display: flex; }
-        .rename-input { width: 100%; padding: 2px 5px; border: 1px solid #2563eb; border-radius: 4px; font-size: 14px; color: var(--text-primary); background-color: #f0f4ff; outline: none; }
+        .rename-input { width: 100%; padding: 2px 5px; border: 1px solid #2563eb; border-radius: 4px; font-size: 14px; color: #111827; background-color: #f0f4ff; outline: none; }
         .session-menu-btn { background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 4px; font-size: 18px; color: #6b7280; min-width: 24px; }
         .session-menu-btn:hover { background: #f3f4f6; }
         .session-dropdown { position: absolute; right: 0; top: 100%; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); z-index: 100; min-width: 160px; margin-top: 4px; }
@@ -872,12 +872,12 @@ export default function AIToolsPage() {
         .session-dropdown button:hover { background: #f3f4f6; }
         .session-dropdown .delete-btn { color: #dc2626; }
         
-        .chat-main { border: 1px solid var(--text-secondary);border-radius: 18px; flex: 1; display: flex; flex-direction: column; background:var(--bg-main);padding: 20px 40px; min-height: 0; }
+        .chat-main { flex: 1; display: flex; flex-direction: column; padding: 20px 40px; min-height: 0; }
         .chat-header { text-align: center; margin-bottom: 20px; }
         .gradient-title { font-size: 28px; margin: 0 0 8px 0; background: linear-gradient(90deg, #1d4ed8, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .typing-suggestions-text { color: #6b7280; margin: 0 0 30px 0; font-size: 15px; font-weight: 500; min-height: 20px; }
         .typing-word { font-weight: 600; color: #3b82f6; }
-        .typing-cursor { display: inline-block; animation: blink-cursor 0.75s step-end infinite; font-weight: 600; color: #3b82f6; } 
+        .typing-cursor { display: inline-block; animation: blink-cursor 0.75s step-end infinite; font-weight: 600; color: #3b82f6; }
         @keyframes blink-cursor { from, to { opacity: 1; } 50% { opacity: 0; } }
         .subtitle { color: #6b7280; margin: 0 0 30px 0; font-size: 15px; }
         
@@ -893,7 +893,7 @@ export default function AIToolsPage() {
           overflow-y: auto; 
           margin-bottom: 20px; 
           padding: 20px; 
-          background: var(--bg-muted); 
+          background: white; 
           border-radius: 12px; 
           border: 1px solid #e5e7eb;
           /* Custom scrollbar styling */
@@ -923,12 +923,12 @@ export default function AIToolsPage() {
         .empty-state h3 { color: #374151; margin-bottom: 8px; }
         .messages-list { display: flex; flex-direction: column; gap: 20px; }
         .message { padding: 16px; border-radius: 12px; max-width: 80%; animation: messageSlide 0.3s ease; }
-        .user-message { align-self: flex-end; background: var(--bg-main); border: 1px solid #bfdbfe; }
-        .ai-message { align-self: flex-start; background: var(--bg-main); border: 1px solid #e5e7eb; }
+        .user-message { align-self: flex-end; background: #eff6ff; border: 1px solid #bfdbfe; }
+        .ai-message { align-self: flex-start; background: #f9fafb; border: 1px solid #e5e7eb; }
         .notes-message { background: #fef3c7; border: 1px solid #fde68a; }
         .message-sender { font-size: 12px; font-weight: 600; margin-bottom: 6px; color: #4b5563; }
         .user-message .message-sender { color: #1e40af; }
-        .message-content { font-size: 14px; line-height: 1.6; color: var(--text-color); white-space: pre-wrap; word-break: break-word; }
+        .message-content { font-size: 14px; line-height: 1.6; color: #111827; white-space: pre-wrap; word-break: break-word; }
         .message-time { font-size: 11px; color: #9ca3af; margin-top: 6px; text-align: right; }
         
         .notes-heading {
@@ -950,14 +950,13 @@ export default function AIToolsPage() {
         .follow-on-context-details summary { font-weight: 600; cursor: pointer; user-select: none; list-style: none; }
         .follow-on-context-json { background: #e0f2f1; color: #064e3b; padding: 10px; border-radius: 6px; margin-top: 8px; font-size: 0.8em; white-space: pre-wrap; word-break: break-all; max-height: 200px; overflow-y: auto; }
         
-        .chat-input-container { padding: 20px 0; bground: var(--bg-main); }
+        .chat-input-container { padding: 20px 0; }
         .input-wrapper { position: relative; max-width: 600px; margin: 0 auto; }
         .large-input { max-width: 700px; }
         .extra-large-input { max-width: 800px; }
         
         .chat-input { 
           width: 100%; 
-          bgcolor: var(--input-bg);
           padding: 16px 60px 16px 20px; 
           border-radius: 14px; 
           border: 2px solid #d1d5db; 
@@ -967,7 +966,7 @@ export default function AIToolsPage() {
           max-height: 150px; 
           font-family: inherit; 
           transition: all 0.3s ease;
-          
+          background: white;
         }
         
         .large-input-field {
@@ -1055,7 +1054,6 @@ export default function AIToolsPage() {
           padding: 20px 40px; 
           overflow-y: auto;
           scrollbar-width: none; /* Firefox */
-          background: var(--bg-main);
         }
         
         .notes-main::-webkit-scrollbar,
@@ -1078,10 +1076,9 @@ export default function AIToolsPage() {
         .notes-main::-webkit-scrollbar-thumb:hover,
         .roadmap-main::-webkit-scrollbar-thumb:hover {
           background: #9ca3af;
-           align-items: stretch !important;
         }
         
-        .notes-header{ text-align: center; margin-bottom: 20px; }
+        .notes-header, .roadmap-header { text-align: center; margin-bottom: 20px; }
         .prompt-suggestions { display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
         .prompt-suggestions button { padding: 10px 20px; background: #f3f4f6; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer; font-size: 14px; transition: all 0.2s; color: #374151; font-weight: 500; }
         .prompt-suggestions button:hover { background: #e5e7eb; border-color: #d1d5db; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
@@ -1091,19 +1088,10 @@ export default function AIToolsPage() {
           flex: 1;
           display: flex;
           flex-direction: column;
-          align-items: center;
-          justify-content: center;
           gap: 40px;
           padding-bottom: 40px;
         }
-          .roadmap-header {
-        position: relative;
-        top: 0;
-         z-index: 5;
-          background: var(--bg-main);
-         padding-top: 10px;
-         padding-bottom: 10px;
-           margin-bottom: 20px;
+        
         .roadmap-input-section {
           display: flex;
           flex-direction: column;
@@ -1586,7 +1574,7 @@ export default function AIToolsPage() {
 
       {!activeTool && (
         <div className="ai-tools-page">
-          <h1 className="aichart-header">AI Tools</h1>
+          <h1 className="ai-title">AI Tools</h1>
           <div className="ai-grid">
             <ToolCard
               title="AI Chatbot"

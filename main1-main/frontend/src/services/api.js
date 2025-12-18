@@ -1,3 +1,5 @@
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+
 const API_BASE_URL = 'http://localhost:5000/api';
 
 class ApiService {
@@ -10,11 +12,6 @@ class ApiService {
     localStorage.setItem('token', token);
   }
 
-  removeToken() {
-    this.token = null;
-    localStorage.removeItem('token');
-  }
-
   getAuthHeaders() {
     return this.token ? { Authorization: `Bearer ${this.token}` } : {};
   }
@@ -22,106 +19,58 @@ class ApiService {
   async request(endpoint, options = {}) {
     const url = `${API_BASE_URL}${endpoint}`;
     const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...this.getAuthHeaders(),
-        ...options.headers,
-      },
+      headers: { 'Content-Type': 'application/json', ...this.getAuthHeaders() },
       ...options,
     };
-
-    try {
-      const response = await fetch(url, config);
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Request failed');
-      }
-
-      return data;
-    } catch (error) {
-      console.error('API request failed:', error);
-      throw error;
-    }
-  }
-
-  // Auth methods
-  async register(email, password, userType = 'student') {
-    const data = await this.request('/auth/register', {
-      method: 'POST',
-      body: JSON.stringify({ email, password, user_type: userType }),
-    });
-
-    if (data.token) {
-      this.setToken(data.token);
-    }
-
+    const response = await fetch(url, config);
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Request failed');
     return data;
   }
 
-  async login(email, password, userType = 'student') {
+  async login(email, password, userType) {
+    const userCredential = await signInWithEmailAndPassword(getAuth(), email, password);
+    const idToken = await userCredential.user.getIdToken();
     const data = await this.request('/auth/login', {
       method: 'POST',
-      body: JSON.stringify({ email, password, user_type: userType }),
+      body: JSON.stringify({ id_token: idToken, user_type: userType }),
     });
-
-    if (data.token) {
-      this.setToken(data.token);
-    }
-
+    this.setToken(idToken);
     return data;
   }
 
-  async googleAuth(userType = 'student') {
-    const data = await this.request('/auth/google', {
+  async googleAuth(userType) {
+    const result = await signInWithPopup(getAuth(), new GoogleAuthProvider());
+    const idToken = await result.user.getIdToken();
+    const data = await this.request('/auth/login', {
       method: 'POST',
-      body: JSON.stringify({ user_type: userType }),
+      body: JSON.stringify({ id_token: idToken, user_type: userType }),
     });
-
-    if (data.token) {
-      this.setToken(data.token);
-    }
-
+    this.setToken(idToken);
     return data;
   }
 
-  async githubAuth(userType = 'student') {
-    const data = await this.request('/auth/github', {
+  async getUserProfile() {
+    return await this.request('/auth/profile');
+  }
+  // Add this method inside your ApiService class in api.js
+  async updateUserProfile(profileData) {
+    return await this.request('/auth/profile/update', {
       method: 'POST',
-      body: JSON.stringify({ user_type: userType }),
+      body: JSON.stringify(profileData),
     });
-
-    if (data.token) {
-      this.setToken(data.token);
-    }
-
-    return data;
   }
-
-  async verifyToken() {
-    return await this.request('/auth/verify');
-  }
-
-  // Logout
   logout() {
-    this.removeToken();
+    localStorage.removeItem('token'); // Clears local state
+    const auth = getAuth();
+    auth.signOut(); // Tells Firebase the session is over
   }
-
-  // Onboarding
-  async onboardUser(onboardData) {
-    return await this.request('/auth/onboard', {
+  async generateCertificate(courseName) {
+    return await this.request('/certificate/generate', {
       method: 'POST',
-      body: JSON.stringify(onboardData),
+      body: JSON.stringify({ course_name: courseName }),
     });
   }
-  // Generate Certificate
-async generateCertificate(courseName) {
-  return await this.request('/certificate/generate', {
-    method: 'POST',
-    body: JSON.stringify({ course_name: courseName }),
-  });
-}
-
 }
 
 export default new ApiService();

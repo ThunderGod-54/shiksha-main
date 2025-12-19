@@ -379,7 +379,7 @@ const [isSignUp, setIsSignUp] = useState(false);
     // Note: Since you asked to remove GitHub Auth in the previous step,
     // this button will still exist in your UI but we should point it to a message
     // or you can delete the GithubIcon button from the JSX below.
-    setError('GitHub Auth is currently disabled. Please use Google or Email.');
+    setError('Github authentication is just a placeholder for now. Please use Google or Email Auth.');
     setLoading(false);
   };
   // --- END OF UPDATED LOGIC ---

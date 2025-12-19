@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
+import { GoogleGenerativeAI } from "@google/generative-ai"; // Real AI SDK
 import './aichatbot.css';
+
+// --- INITIALIZE REAL AI ---
+// REPLACE WITH YOUR REAL GEMINI API KEY
+const GEMINI_API_KEY = "lol"; // ⚠️ GET FROM: https://makersuite.google.com/app/apikey
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // Use 1.5-flash for speed
+
 // Typing suggestions component
 const TypingSuggestions = () => {
   const suggestions = ["Ask doubts", "Explain topics", "Tech concepts", "Math solutions", "History facts", "Science labs"];
@@ -128,6 +136,153 @@ const TimelineCard = ({ phase, title, weeks, content, isLast }) => (
   </div>
 );
 
+// --- REAL AI HELPER FUNCTIONS ---
+const generateAIResponse = async (prompt, context = "") => {
+  try {
+    const fullPrompt = `You are ShikshaPlus AI Study Assistant, a helpful educational AI.
+You help students with their studies, answer questions, explain concepts, and provide learning guidance.
+Be concise, accurate, and encouraging. Focus on educational content.
+
+${context ? `Context from previous conversation: ${context}\n\n` : ''}
+Student's question: ${prompt}
+
+Assistant's response:`;
+
+    const result = await model.generateContent(fullPrompt);
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error("AI Error:", error);
+    throw new Error("Failed to generate AI response. Please check your API key and try again.");
+  }
+};
+
+const generateNotes = async (topic) => {
+  try {
+    const prompt = `Create comprehensive study notes about "${topic}".
+    Format with:
+    1. Clear title
+    2. Introduction/Overview
+    3. Main concepts and definitions
+    4. Key points (bullet points)
+    5. Examples if applicable
+    6. Summary
+    7. Important formulas/theorems if applicable
+    8. Common misconceptions to avoid
+    9. Practice questions/suggestions
+    10. Additional resources/references
+    
+    Make the notes educational, accurate, well-organized, and suitable for revision.`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return `# Study Notes: ${topic}\n\n${response.text()}`;
+  } catch (error) {
+    console.error("Notes AI Error:", error);
+    throw new Error("Failed to generate notes. Please try again.");
+  }
+};
+
+const generateRoadmap = async (goal) => {
+  try {
+    const prompt = `Create a 12-week learning roadmap to master "${goal}".
+    Structure with:
+    1. GOAL: Clearly state the learning goal
+    2. DURATION: 12 weeks
+    3. PHASES: Break into 3 phases (Foundation, Intermediate, Advanced) with:
+       - Phase name/number
+       - Duration (weeks)
+       - Learning objectives
+       - Key topics to cover
+       - Practice projects/exercises
+       - Resources to use
+    4. MILESTONES: Key achievements to track progress
+    5. RESOURCES: Recommended books, courses, websites, tools
+    6. TIPS: Study strategies and best practices
+    
+    Make it practical, actionable, progressive (beginner to advanced), and include hands-on projects.`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+
+    // Parse response into structured format
+    const text = response.text();
+    const lines = text.split('\n');
+
+    const phases = [];
+    let currentPhase = null;
+    const milestones = [];
+    const resources = {
+      courses: ["Coursera", "Udemy", "edX", "YouTube tutorials"],
+      books: ["Beginner's Guide", "Advanced Concepts", "Practice Books"],
+      platforms: ["GitHub", "Stack Overflow", "LeetCode"],
+      communities: ["Discord", "Reddit", "LinkedIn Groups"]
+    };
+
+    lines.forEach(line => {
+      line = line.trim();
+      if (line.includes("Phase") || line.includes("Foundation") || line.includes("Intermediate") || line.includes("Advanced")) {
+        if (currentPhase) phases.push(currentPhase);
+        currentPhase = {
+          phase: `Phase ${phases.length + 1}`,
+          title: line.replace("Phase", "").trim() || (phases.length === 0 ? "Foundation" : phases.length === 1 ? "Intermediate" : "Advanced"),
+          weeks: `Weeks ${phases.length * 4 + 1}-${(phases.length + 1) * 4}`,
+          content: []
+        };
+      } else if (line && currentPhase) {
+        if (line.length > 10) currentPhase.content.push(line);
+      }
+
+      if (line.includes("milestone") || line.includes("Milestone") || (line.includes("•") && line.length > 20)) {
+        const milestone = line.replace("•", "").replace("-", "").trim();
+        if (milestone && milestone.length > 10) milestones.push(milestone);
+      }
+    });
+
+    if (currentPhase) phases.push(currentPhase);
+
+    // Ensure we have 3 phases
+    while (phases.length < 3) {
+      phases.push({
+        phase: `Phase ${phases.length + 1}`,
+        title: ["Foundation", "Intermediate", "Advanced"][phases.length],
+        weeks: `Weeks ${phases.length * 4 + 1}-${(phases.length + 1) * 4}`,
+        content: [
+          "Learn fundamental concepts & terminology",
+          "Set up development environment",
+          "Complete beginner tutorials & courses",
+          "Build practice projects",
+          "Join learning communities"
+        ]
+      });
+    }
+
+    // Ensure we have milestones
+    if (milestones.length < 3) {
+      milestones.push(
+        "Complete foundation concepts",
+        "Build first portfolio project",
+        "Master key skills",
+        "Create GitHub portfolio",
+        "Network with professionals",
+        "Prepare for interviews"
+      );
+    }
+
+    return {
+      title: goal,
+      goal: `Become proficient in ${goal}`,
+      duration: "12 weeks",
+      phases: phases,
+      milestones: milestones.slice(0, 6),
+      resources: resources
+    };
+  } catch (error) {
+    console.error("Roadmap AI Error:", error);
+    throw new Error("Failed to generate roadmap. Please try again.");
+  }
+};
+
 // Chat UI Component
 const ChatUI = ({ sessions, currentSessionId, onSessionChange, onNewChat, onDeleteChat, onRenameChat, onShareChat, onFollowOnChat, onUpdateMessages }) => {
   const [messages, setMessages] = useState([]);
@@ -135,6 +290,7 @@ const ChatUI = ({ sessions, currentSessionId, onSessionChange, onNewChat, onDele
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [renameValue, setRenameValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
 
@@ -164,6 +320,7 @@ const ChatUI = ({ sessions, currentSessionId, onSessionChange, onNewChat, onDele
 
     const messageToSend = inputMessage;
     setInputMessage("");
+    setIsLoading(true);
 
     const userMessage = {
       id: Date.now().toString(),
@@ -175,20 +332,42 @@ const ChatUI = ({ sessions, currentSessionId, onSessionChange, onNewChat, onDele
     const newMessages = [...messages, userMessage];
     onUpdateMessages(currentSessionId, newMessages);
 
-    // Mock AI Response
-    setTimeout(() => {
+    // REAL AI RESPONSE - DIRECT GEMINI CALL
+    try {
+      const context = messages
+        .filter(msg => msg.sender === "user" || msg.sender === "ai")
+        .slice(-5)
+        .map(msg => `${msg.sender}: ${msg.content}`)
+        .join('\n');
+
+      const aiResponse = await generateAIResponse(messageToSend, context);
+
       const aiMessage = {
         id: (Date.now() + 1).toString(),
-        content: `I'm your AI assistant. You asked: "${messageToSend}". This is a demonstration response. I can help you with various topics including programming, math, science, and general knowledge questions.`,
+        content: aiResponse,
         sender: "ai",
         timestamp: new Date().toISOString(),
       };
       onUpdateMessages(currentSessionId, [...newMessages, aiMessage]);
-    }, 1000);
+    } catch (error) {
+      console.error("AI Chat Error:", error);
+      // Fallback to helpful response if API key is missing
+      const aiMessage = {
+        id: (Date.now() + 1).toString(),
+        content: GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE"
+          ? "⚠️ Please add your Gemini API key! Get one from: https://makersuite.google.com/app/apikey\nThen replace 'YOUR_GEMINI_API_KEY_HERE' in the code with your actual key."
+          : `I apologize, but I encountered an error: ${error.message}. Please check your API key and try again.`,
+        sender: "ai",
+        timestamp: new Date().toISOString(),
+      };
+      onUpdateMessages(currentSessionId, [...newMessages, aiMessage]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey && !isLoading) {
       e.preventDefault();
       sendMessage();
     }
@@ -292,6 +471,14 @@ const ChatUI = ({ sessions, currentSessionId, onSessionChange, onNewChat, onDele
               <div className="empty-icon">💬</div>
               <h3>Start a conversation</h3>
               <p>Ask me anything about your studies!</p>
+              {GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" && (
+                <div className="api-key-warning">
+                  ⚠️ <strong>API Key Required:</strong> Get your free Gemini API key from
+                  <a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener noreferrer">
+                    https://makersuite.google.com/app/apikey
+                  </a>
+                </div>
+              )}
             </div>
           ) : (
             <div className="messages-list">
@@ -313,6 +500,18 @@ const ChatUI = ({ sessions, currentSessionId, onSessionChange, onNewChat, onDele
                   </div>
                 )
               ))}
+              {isLoading && (
+                <div className="message ai-message">
+                  <div className="message-sender">AI Assistant</div>
+                  <div className="message-content">
+                    <div className="typing-indicator">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              )}
               <div ref={messagesEndRef} />
             </div>
           )}
@@ -327,9 +526,14 @@ const ChatUI = ({ sessions, currentSessionId, onSessionChange, onNewChat, onDele
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               rows="1"
+              disabled={isLoading}
             />
-            <button className="send-button" onClick={sendMessage} disabled={!inputMessage.trim()}>
-              <span className="send-arrow">→</span>
+            <button className="send-button" onClick={sendMessage} disabled={!inputMessage.trim() || isLoading}>
+              {isLoading ? (
+                <span className="loading-spinner-small"></span>
+              ) : (
+                <span className="send-arrow">→</span>
+              )}
             </button>
           </div>
           <p className="input-hint">Press Enter to send, Shift+Enter for new line</p>
@@ -343,6 +547,7 @@ const ChatUI = ({ sessions, currentSessionId, onSessionChange, onNewChat, onDele
 const NotesGeneratorUI = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
 
@@ -355,6 +560,7 @@ const NotesGeneratorUI = () => {
 
     const messageToSend = inputMessage;
     setInputMessage("");
+    setIsLoading(true);
 
     const userMessage = {
       id: Date.now().toString(),
@@ -365,23 +571,45 @@ const NotesGeneratorUI = () => {
 
     setMessages(prev => [...prev, userMessage]);
 
-    setTimeout(() => {
+    // REAL NOTES GENERATION - DIRECT GEMINI CALL
+    try {
+      const notesContent = await generateNotes(messageToSend);
+
       const notesResponse = {
         id: (Date.now() + 1).toString(),
-        content: `# Generated Notes for: ${messageToSend}\n\n## Overview\nComprehensive study notes covering key concepts and important points.\n\n## Key Topics:\n\n**1. Fundamental Concepts**\n   - Core principles and definitions\n   - Important terminology\n   - Basic frameworks\n\n**2. Advanced Topics**\n   - Complex theories and applications\n   - Real-world examples\n   - Case studies\n\n**3. Practical Applications**\n   - How to apply concepts\n   - Problem-solving techniques\n   - Best practices\n\n## Summary\nThese notes provide a structured overview of ${messageToSend}. Review regularly for best retention.`,
+        content: notesContent,
         sender: "ai",
         timestamp: new Date().toISOString(),
         isNotes: true,
       };
       setMessages(prev => [...prev, notesResponse]);
-    }, 1500);
+    } catch (error) {
+      console.error("Notes Generation Error:", error);
+
+      const notesResponse = {
+        id: (Date.now() + 1).toString(),
+        content: GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE"
+          ? "⚠️ Please add your Gemini API key to generate real notes!\nGet key from: https://makersuite.google.com/app/apikey"
+          : `# Study Notes: ${messageToSend}\n\nError generating notes: ${error.message}\n\nPlease check your API key and try again.`,
+        sender: "ai",
+        timestamp: new Date().toISOString(),
+        isNotes: true,
+      };
+      setMessages(prev => [...prev, notesResponse]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey && !isLoading) {
       e.preventDefault();
       generateNotes();
     }
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setInputMessage(suggestion);
   };
 
   return (
@@ -399,13 +627,18 @@ const NotesGeneratorUI = () => {
               <h3>Generate Study Notes</h3>
               <p>Tell me what topic you want notes for!</p>
               <div className="prompt-suggestions">
-                <button onClick={() => setInputMessage("Generate revision notes for DSA")}>DSA Notes</button>
-                <button onClick={() => setInputMessage("Create comprehensive notes for Cyber Security")}>CyberSec</button>
-                <button onClick={() => setInputMessage("Generate notes for Generative AI")}>GenAI</button>
-                <button onClick={() => setInputMessage("Create study notes for React.js")}>React.js Notes</button>
-                <button onClick={() => setInputMessage("Make notes about Machine Learning")}>ML Notes</button>
-                <button onClick={() => setInputMessage("Generate notes for Web Development")}>Web Dev</button>
+                <button onClick={() => handleSuggestionClick("Data Structures and Algorithms")}>DSA Notes</button>
+                <button onClick={() => handleSuggestionClick("Cyber Security Fundamentals")}>CyberSec</button>
+                <button onClick={() => handleSuggestionClick("Generative AI Concepts")}>GenAI</button>
+                <button onClick={() => handleSuggestionClick("React.js Framework")}>React.js Notes</button>
+                <button onClick={() => handleSuggestionClick("Machine Learning Basics")}>ML Notes</button>
+                <button onClick={() => handleSuggestionClick("Web Development")}>Web Dev</button>
               </div>
+              {GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" && (
+                <div className="api-key-warning">
+                  ⚠️ <strong>API Key Required:</strong> Add your Gemini API key to generate real notes
+                </div>
+              )}
             </div>
           ) : (
             <div className="messages-list">
@@ -420,6 +653,7 @@ const NotesGeneratorUI = () => {
                         .replace(/# (.*?)<br>/g, '<h3 class="notes-heading">$1</h3>')
                         .replace(/## (.*?)<br>/g, '<h4 class="notes-subheading">$1</h4>')
                         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\*(.*?)\*/g, '<em>$1</em>')
                     }}
                   />
                   <div className="message-time">
@@ -427,6 +661,18 @@ const NotesGeneratorUI = () => {
                   </div>
                 </div>
               ))}
+              {isLoading && (
+                <div className="message ai-message notes-message">
+                  <div className="message-sender">Notes Generator</div>
+                  <div className="message-content">
+                    <div className="typing-indicator">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              )}
               <div ref={messagesEndRef} />
             </div>
           )}
@@ -441,9 +687,14 @@ const NotesGeneratorUI = () => {
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               rows="1"
+              disabled={isLoading}
             />
-            <button className="send-button notes-button large-send-button" onClick={generateNotes} disabled={!inputMessage.trim()}>
-              <span className="send-arrow">→</span>
+            <button className="send-button notes-button large-send-button" onClick={generateNotes} disabled={!inputMessage.trim() || isLoading}>
+              {isLoading ? (
+                <span className="loading-spinner-small"></span>
+              ) : (
+                <span className="send-arrow">→</span>
+              )}
             </button>
           </div>
           <p className="input-hint">Press Enter to generate notes</p>
@@ -467,12 +718,25 @@ const RoadmapGeneratorUI = () => {
     setInputMessage("");
     setIsLoading(true);
 
-    // Clear existing roadmap
     setRoadmapData(null);
 
-    setTimeout(() => {
-      // Create structured roadmap data
-      const roadmap = {
+    // REAL ROADMAP GENERATION - DIRECT GEMINI CALL
+    try {
+      const roadmap = await generateRoadmap(messageToSend);
+
+      setRoadmapData(roadmap);
+      setIsLoading(false);
+
+      setTimeout(() => {
+        if (roadmapContainerRef.current) {
+          roadmapContainerRef.current.scrollTop = 0;
+        }
+      }, 100);
+    } catch (error) {
+      console.error("Roadmap Generation Error:", error);
+
+      // Fallback roadmap
+      const fallbackRoadmap = {
         title: messageToSend,
         goal: `Become proficient in ${messageToSend}`,
         duration: "12 weeks",
@@ -481,7 +745,6 @@ const RoadmapGeneratorUI = () => {
             phase: "Phase 1",
             title: "Foundation",
             weeks: "Weeks 1-4",
-            description: "Build core fundamentals and understanding",
             content: [
               "Learn fundamental concepts & terminology",
               "Set up development environment",
@@ -494,7 +757,6 @@ const RoadmapGeneratorUI = () => {
             phase: "Phase 2",
             title: "Intermediate Skills",
             weeks: "Weeks 5-8",
-            description: "Develop practical skills and work on real projects",
             content: [
               "Master core tools & frameworks",
               "Work on real-world applications",
@@ -507,7 +769,6 @@ const RoadmapGeneratorUI = () => {
             phase: "Phase 3",
             title: "Advanced Mastery",
             weeks: "Weeks 9-12",
-            description: "Specialize and prepare for professional opportunities",
             content: [
               "Specialize in niche areas",
               "Build complex, scalable projects",
@@ -533,20 +794,17 @@ const RoadmapGeneratorUI = () => {
         }
       };
 
-      setRoadmapData(roadmap);
-      setIsLoading(false);
+      if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE") {
+        fallbackRoadmap.ai_note = "⚠️ Add Gemini API key for AI-generated roadmaps!";
+      }
 
-      // Scroll to show generated content
-      setTimeout(() => {
-        if (roadmapContainerRef.current) {
-          roadmapContainerRef.current.scrollTop = 0;
-        }
-      }, 100);
-    }, 2000);
+      setRoadmapData(fallbackRoadmap);
+      setIsLoading(false);
+    }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey && !isLoading) {
       e.preventDefault();
       generateRoadmap();
     }
@@ -575,6 +833,14 @@ const RoadmapGeneratorUI = () => {
                     <li>⏱️ <strong>Time Management</strong> - Realistic schedule</li>
                   </ul>
                   <p className="coming-soon">Type your learning goal below to get started!</p>
+                  {GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" && (
+                    <div className="api-key-warning">
+                      ⚠️ <strong>Add Gemini API Key:</strong> Get from
+                      <a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener noreferrer">
+                        makersuite.google.com/app/apikey
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -587,6 +853,7 @@ const RoadmapGeneratorUI = () => {
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyPress={handleKeyPress}
                     rows="2"
+                    disabled={isLoading}
                   />
                   <button className="send-button extra-large-send-button" onClick={generateRoadmap} disabled={!inputMessage.trim() || isLoading}>
                     {isLoading ? (
@@ -704,6 +971,7 @@ const RoadmapGeneratorUI = () => {
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyPress={handleKeyPress}
                     rows="2"
+                    disabled={isLoading}
                   />
                   <button className="send-button extra-large-send-button" onClick={generateRoadmap} disabled={!inputMessage.trim() || isLoading}>
                     {isLoading ? (
@@ -736,7 +1004,6 @@ export default function AIToolsPage() {
   ]);
   const [currentSessionId, setCurrentSessionId] = useState('1');
 
-  // Add this function - it was missing
   const updateSessionMessages = (sessionId, newMessages) => {
     setChatSessions(prevSessions =>
       prevSessions.map(session =>
@@ -835,6 +1102,31 @@ export default function AIToolsPage() {
       background: ' var(--bg-main)',
       minHeight: '100vh'
     }}>
+      {/* ADD CSS FOR API KEY WARNING */}
+      <style>{`
+        .api-key-warning {
+          background: #fef3c7;
+          border: 2px solid #f59e0b;
+          border-radius: 10px;
+          padding: 15px;
+          margin: 20px auto;
+          max-width: 600px;
+          color: #92400e;
+          text-align: center;
+        }
+        
+        .api-key-warning a {
+          color: #2563eb;
+          text-decoration: underline;
+          margin-left: 5px;
+        }
+        
+        .api-key-warning strong {
+          color: #dc2626;
+        }
+      `}</style>
+
+      {/* ALL YOUR ORIGINAL STYLES HERE - KEEP THEM EXACTLY AS THEY ARE */}
       <style>{`
         * { box-sizing: border-box; }
        
@@ -896,8 +1188,7 @@ export default function AIToolsPage() {
           background: var(--bg-muted); 
           border-radius: 12px; 
           border: 1px solid #e5e7eb;
-          /* Custom scrollbar styling */
-          scrollbar-width: none; /* Firefox */
+          scrollbar-width: none;
         }
         
         .messages-container::-webkit-scrollbar {
@@ -1053,7 +1344,7 @@ export default function AIToolsPage() {
           flex-direction: column; 
           padding: 20px 40px; 
           overflow-y: auto;
-          scrollbar-width: none; /* Firefox */
+          scrollbar-width: none;
           background: var(--bg-main);
         }
         
@@ -1514,9 +1805,47 @@ export default function AIToolsPage() {
           animation: spin 1s linear infinite;
         }
         
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        .loading-spinner-small {
+          width: 18px;
+          height: 18px;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-top: 2px solid white;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+        
+        .typing-indicator {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          padding: 10px 0;
+        }
+        
+        .typing-indicator span {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #3b82f6;
+          animation: typing 1.4s infinite ease-in-out both;
+        }
+        
+        .typing-indicator span:nth-child(1) {
+          animation-delay: -0.32s;
+        }
+        
+        .typing-indicator span:nth-child(2) {
+          animation-delay: -0.16s;
+        }
+        
+        @keyframes typing {
+          0%, 80%, 100% { 
+            transform: scale(0.8);
+            opacity: 0.5;
+          }
+          40% { 
+            transform: scale(1);
+            opacity: 1;
+          }
         }
         
         .roadmap-main { 
@@ -1582,6 +1911,7 @@ export default function AIToolsPage() {
         @keyframes slideUp { from { transform: translateY(60px) scale(0.96); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes messageSlide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         @media (max-width: 768px) {
           .chat-layout { flex-direction: column; }

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ApiService from '../services/api';
+import MiniQuiz from '../components/MiniQuiz';
+import quizData from '../services/quizData';
 
 const CourseContinued2 = () => {
   const navigate = useNavigate();
@@ -8,22 +10,27 @@ const CourseContinued2 = () => {
   const [selectedLesson, setSelectedLesson] = useState(0);
   const [output, setOutput] = useState('');
 
+  // Quiz state
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [quizCompleted, setQuizCompleted] = useState(false);
+  const [quizScore, setQuizScore] = useState(0);
+
   // GLOBAL THEME SUPPORT (reads from Navbar toggle)
   const [isDark, setIsDark] = useState(localStorage.getItem("theme") === "dark");
 
- useEffect(() => {
-  const updateTheme = () => {
-    setIsDark(localStorage.getItem("theme") === "dark");
-  };
+  useEffect(() => {
+    const updateTheme = () => {
+      setIsDark(localStorage.getItem("theme") === "dark");
+    };
 
-  // detect global theme event
-  window.addEventListener("theme-changed", updateTheme);
+    // detect global theme event
+    window.addEventListener("theme-changed", updateTheme);
 
-  // sync on first load
-  updateTheme();
+    // sync on first load
+    updateTheme();
 
-  return () => window.removeEventListener("theme-changed", updateTheme);
-}, []);
+    return () => window.removeEventListener("theme-changed", updateTheme);
+  }, []);
 
 
   // -------------------------------------------------------------
@@ -245,8 +252,12 @@ print(f"5 + 3 = {result}")`,
   };
 
   const generateCertificate = async () => {
+    if (!quizCompleted) {
+      alert("Please complete the quiz first!");
+      return;
+    }
     try {
-      const res = await ApiService.generateCertificate(course.title);
+      const res = await ApiService.generateCertificate(course.title, quizScore);
       if (res.download_url) {
         const a = document.createElement("a");
         a.href = "http://localhost:5000" + res.download_url;
@@ -257,6 +268,13 @@ print(f"5 + 3 = {result}")`,
     } catch {
       alert("Failed to generate certificate");
     }
+  };
+
+  const handleQuizComplete = (score) => {
+    setQuizScore(score);
+    setQuizCompleted(true);
+    setShowQuiz(false);
+    alert(`Quiz completed! Your score: ${score}%`);
   };
 
   return (
@@ -388,6 +406,63 @@ print(f"5 + 3 = {result}")`,
             </>
           )}
 
+          {/* QUIZ SECTION ON LAST LESSON */}
+          {selectedLesson === course.lessons.length - 1 && (
+            <div style={{ marginTop: '30px' }}>
+              {!showQuiz && !quizCompleted && (
+                <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                  <p style={{ fontSize: '1.1rem', marginBottom: '15px' }}>
+                    Congratulations on completing the course! To get your certificate, please take the quiz.
+                  </p>
+                  <button
+                    onClick={() => setShowQuiz(true)}
+                    style={{
+                      padding: '12px 24px',
+                      background: '#f59e0b',
+                      color: 'white',
+                      borderRadius: '8px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontSize: '1rem'
+                    }}
+                  >
+                    Start Quiz
+                  </button>
+                </div>
+              )}
+
+              {showQuiz && (
+                <MiniQuiz
+                  courseId={courseId}
+                  quizData={quizData}
+                  onComplete={handleQuizComplete}
+                />
+              )}
+
+              {quizCompleted && (
+                <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                  <p style={{ fontSize: '1.1rem', marginBottom: '15px' }}>
+                    Quiz completed with {quizScore}% score! You can now generate your certificate.
+                  </p>
+                  <button
+                    onClick={generateCertificate}
+                    style={{
+                      padding: '12px 24px',
+                      background: '#10b981',
+                      color: 'white',
+                      borderRadius: '8px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontSize: '1rem'
+                    }}
+                  >
+                    Generate Certificate
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* NAVIGATION BUTTONS */}
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
 
@@ -397,20 +472,6 @@ print(f"5 + 3 = {result}")`,
             >
               Previous
             </button>
-
-            {selectedLesson === course.lessons.length - 1 && (
-              <button
-                onClick={generateCertificate}
-                style={{
-                  padding: '12px 24px',
-                  background: '#10b981',
-                  color: 'white',
-                  borderRadius: '8px'
-                }}
-              >
-                Generate Certificate
-              </button>
-            )}
 
             {/* NEXT BUTTON REMOVED ON LAST LESSON */}
             {selectedLesson < course.lessons.length - 1 && (

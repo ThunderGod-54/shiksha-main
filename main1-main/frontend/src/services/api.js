@@ -13,19 +13,45 @@ class ApiService {
   }
 
   getAuthHeaders() {
-    return this.token ? { Authorization: `Bearer ${this.token}` } : {};
+    const headers = { 'Content-Type': 'application/json' };
+    if (this.token) {
+      headers['Authorization'] = `Bearer ${this.token}`;
+    }
+    return headers;
   }
 
   async request(endpoint, options = {}) {
     const url = `${API_BASE_URL}${endpoint}`;
+
+    // Ensure headers are properly merged
+    const headers = { ...this.getAuthHeaders() };
+    if (options.headers) {
+      Object.assign(headers, options.headers);
+    }
+
     const config = {
-      headers: { 'Content-Type': 'application/json', ...this.getAuthHeaders() },
       ...options,
+      headers,
     };
-    const response = await fetch(url, config);
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || 'Request failed');
-    return data;
+
+    // Add body if it exists (but not for GET requests)
+    if (options.body && typeof options.body !== 'string') {
+      config.body = JSON.stringify(options.body);
+    }
+
+    try {
+      const response = await fetch(url, config);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || `Request failed with status ${response.status}`);
+      }
+
+      return data;
+    } catch (error) {
+      console.error('API Request Error:', error);
+      throw error;
+    }
   }
 
   async login(email, password, userType) {
@@ -33,7 +59,7 @@ class ApiService {
     const idToken = await userCredential.user.getIdToken();
     const data = await this.request('/auth/login', {
       method: 'POST',
-      body: JSON.stringify({ id_token: idToken, user_type: userType }),
+      body: { id_token: idToken, user_type: userType },
     });
     this.setToken(idToken);
     return data;
@@ -44,7 +70,7 @@ class ApiService {
     const idToken = await result.user.getIdToken();
     const data = await this.request('/auth/login', {
       method: 'POST',
-      body: JSON.stringify({ id_token: idToken, user_type: userType }),
+      body: { id_token: idToken, user_type: userType },
     });
     this.setToken(idToken);
     return data;
@@ -53,22 +79,51 @@ class ApiService {
   async getUserProfile() {
     return await this.request('/auth/profile');
   }
-  // Add this method inside your ApiService class in api.js
+
   async updateUserProfile(profileData) {
     return await this.request('/auth/profile/update', {
       method: 'POST',
-      body: JSON.stringify(profileData),
+      body: profileData,
     });
   }
+
   logout() {
-    localStorage.removeItem('token'); // Clears local state
+    localStorage.removeItem('token');
     const auth = getAuth();
-    auth.signOut(); // Tells Firebase the session is over
+    auth.signOut();
   }
+
   async generateCertificate(courseName) {
     return await this.request('/certificate/generate', {
       method: 'POST',
-      body: JSON.stringify({ course_name: courseName }),
+      body: { course_name: courseName },
+    });
+  }
+
+  // === AI ENDPOINTS ===
+
+  async aiChat(message, sessionId = null, context = null) {
+    return await this.request('/ai/chat', {
+      method: 'POST',
+      body: {
+        message,
+        session_id: sessionId,
+        context: context
+      },
+    });
+  }
+
+  async generateNotes(topic) {
+    return await this.request('/ai/generate-notes', {
+      method: 'POST',
+      body: { topic },
+    });
+  }
+
+  async generateRoadmap(goal) {
+    return await this.request('/ai/generate-roadmap', {
+      method: 'POST',
+      body: { goal },
     });
   }
 }

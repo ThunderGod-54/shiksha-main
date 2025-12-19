@@ -24,6 +24,26 @@ const productivityStyles = `
   --purple-primary: #8b5cf6;
   --yellow-primary: #f59e0b;
 }
+/* ---------- DARK THEME ---------- */
+[data-theme="dark"] {
+  --dash-bg: #0d1117;
+  --card-bg: #161b22;
+
+  --text-primary: #e6edf3;
+  --text-secondary: #9ba3af;
+
+  --input-border: #30363d;
+  --border-color: #30363d;
+
+  --todo-bg: #0f172a;
+  --todo-border: #30363d;
+
+  --timer-bg: #1f2937;
+
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 6px 15px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 3px 8px rgba(0, 0, 0, 0.4);
+}
 
 .todo-page {
   min-height: 100vh;

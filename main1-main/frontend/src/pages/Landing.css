@@ -597,13 +597,32 @@ body {
     opacity: 0;
     transform-style: preserve-3d;
     padding: 20px 0;
+
+    /* ⭐️ THE SECRET SAUCE: Fades the edges for a smooth entrance/exit */
+    -webkit-mask-image: linear-gradient(to right,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 1) 15%,
+            rgba(0, 0, 0, 1) 85%,
+            rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(to right,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 1) 15%,
+            rgba(0, 0, 0, 1) 85%,
+            rgba(0, 0, 0, 0) 100%);
 }
 
 .marquee-content {
     display: flex;
-    animation: marquee 40s linear infinite;
+    /* ⭐️ INCREASE SECONDS (30-40s) for a smoother, premium feel */
+    animation: marquee 35s linear infinite;
+
+    /* ⭐️ GPU ACCELERATION: Prevents jittering/shuttering */
     will-change: transform;
+    transform: translateZ(0);
+
     gap: 2rem;
+    width: max-content;
+    /* Ensures content doesn't wrap */
 }
 
 .marquee-content:hover {
@@ -616,94 +635,61 @@ body {
     }
 
     100% {
+        /* Since you have two sets of items in JS, -50% is a perfect loop */
         transform: translateX(-50%);
     }
 }
-
-.tech-item {
-    padding: 1.2rem 2.5rem;
-    margin: 0;
-    font-size: 1.2rem;
-    font-weight: 600;
-    border-radius: 16px;
-    white-space: nowrap;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    transform-style: preserve-3d;
-    position: relative;
-    cursor: pointer;
-    box-shadow:
-        0 10px 25px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
-    transform: translateZ(0);
+/* Tech Item Specific Gradients */
+.tech-item.react {
+    background: linear-gradient(135deg, #61DAFB, #2188ff) !important;
+    color: #000 !important;
 }
 
-.tech-item::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 16px;
-    padding: 2px;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.4), transparent);
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    opacity: 0;
-    transition: opacity 0.4s ease;
+.tech-item.flask {
+    background: linear-gradient(135deg, #2c2c2c, #000000) !important;
+    color: white !important;
+}
+
+.tech-item.opencv {
+    background: linear-gradient(135deg, #5c3d8b, #6a4f9c) !important;
+    color: white !important;
+}
+
+.tech-item.firebase {
+    background: linear-gradient(135deg, #FFCA28, #FFA000) !important;
+    color: #000 !important;
+}
+
+.tech-item.gemini {
+    background: linear-gradient(135deg, #8E75FF, #4d3df7) !important;
+    color: white !important;
+}
+
+.tech-item.drive {
+    background: linear-gradient(135deg, #34A853, #1b5e20) !important;
+    color: white !important;
+}
+
+/* Base Styles */
+.tech-item {
+    position: relative;
+    padding: 20px 40px;
+    border-radius: 90px;
+    font-weight: 700;
+    white-space: nowrap;
+    display: inline-block;
+    transition: all 0.4s ease;
 }
 
 .tech-item:hover {
-    transform: translateY(-8px) rotateX(10deg) scale(1.05);
-    box-shadow:
-        0 20px 40px rgba(59, 130, 246, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
-
-.tech-item:hover::before {
-    opacity: 1;
-}
-
-/* Tech Item Colors */
-.vite {
-    background: linear-gradient(135deg, #646cff, #747bff);
-    color: white;
-}
-
-.python {
-    background: linear-gradient(135deg, #3776ab, #4b8bbe);
-    color: white;
-}
-
-.opencv {
-    background: linear-gradient(135deg, #5c3d8b, #6a4f9c);
-    color: white;
-}
-
-.sql {
-    background: linear-gradient(135deg, #00758f, #0096c7);
-    color: white;
-}
-
-.tensor {
-    background: linear-gradient(135deg, #FF6F00, #FF8F00);
-    color: white;
-}
-
-.fastapi {
-    background: linear-gradient(135deg, #009688, #4DB6AC);
-    color: white;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .tech-separator {
     color: #cbd5e1;
     font-size: 1.8rem;
-    margin: 0 0.5rem;
-    display: inline-flex;
-    align-items: center;
+    margin: 0 1rem;
     opacity: 0.7;
 }
 
@@ -1059,4 +1045,38 @@ body {
 .guest-btn-cta,
 .bot-image {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+.guest-note-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    /* White box, a bit transparent */
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    margin-top: 1.5rem;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.note-dot {
+    width: 10px;
+    height: 10px;
+    background-color: #ef4444;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.guest-note-banner p {
+    /* Bold Red Colors */
+    color: #dc2626;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin: 0;
+    letter-spacing: 0.01em;
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAuth } from "firebase/auth"; // Access Firebase for real-time data
+import { getAuth } from "firebase/auth";
 import apiService from "../services/api";
 
 const profileStyles = `
@@ -60,8 +60,7 @@ const profileStyles = `
 }
 
 .profile-input,
-.profile-select,
-.profile-file-input {
+.profile-select {
   width: 100%;
   padding: 12px;
   background: rgba(255, 255, 255, 0.3);
@@ -116,23 +115,6 @@ const profileStyles = `
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
-
-.profile-checkbox-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.profile-chip-label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.3);
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  cursor: pointer;
-}
 `;
 
 const Profile = () => {
@@ -145,7 +127,6 @@ const Profile = () => {
     interests: [],
   });
 
-  const [profilePhoto, setProfilePhoto] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -154,16 +135,12 @@ const Profile = () => {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        // 1. Get profile data from backend
         const data = await apiService.getUserProfile();
-
-        // 2. Access the real-time Firebase user object
         const auth = getAuth();
         const firebaseUser = auth.currentUser;
 
         if (firebaseUser) {
           setUserData({
-            // Show backend name if saved, otherwise show Google Name
             name: data.name || firebaseUser.displayName || "",
             phone: data.phone || "",
             institution_name: data.institution_name || "",
@@ -172,7 +149,7 @@ const Profile = () => {
             interests: data.interests || [],
           });
 
-          // Show backend photo if saved, otherwise show Google Photo
+          // We still keep the preview to show the user's current avatar
           if (data.profile_photo_url) {
             setPhotoPreview(data.profile_photo_url);
           } else if (firebaseUser.photoURL) {
@@ -191,24 +168,6 @@ const Profile = () => {
     setUserData((p) => ({ ...p, [name]: value }));
   };
 
-  const handleInterest = (i) => {
-    setUserData((p) => ({
-      ...p,
-      interests: p.interests.includes(i)
-        ? p.interests.filter((x) => x !== i)
-        : [...p.interests, i],
-    }));
-  };
-
-  const handlePhoto = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setProfilePhoto(file);
-    const reader = new FileReader();
-    reader.onload = (ev) => setPhotoPreview(ev.target.result);
-    reader.readAsDataURL(file);
-  };
-
   const submitProfile = async (e) => {
     e.preventDefault();
     setError("");
@@ -216,7 +175,6 @@ const Profile = () => {
     setLoading(true);
 
     try {
-      // NOTE: Using standard JSON for hackathon speed (not FormData unless uploading raw files)
       await apiService.onboardUser(userData);
       setSuccess("Profile updated successfully!");
     } catch (err) {
@@ -238,18 +196,16 @@ const Profile = () => {
           {success && <div className="alert-box alert-success">{success}</div>}
 
           <form onSubmit={submitProfile}>
+            {/* Displaying the photo only (Read-only) */}
             <div className="profile-photo-wrap">
               {photoPreview && (
                 <img src={photoPreview} alt="Profile" className="profile-photo-img" />
               )}
             </div>
 
-            <label className="profile-form-label">Update Profile Photo</label>
-            <input type="file" accept="image/*" className="profile-file-input" onChange={handlePhoto} />
-
             <div style={{ marginTop: "1rem" }}>
               <label className="profile-form-label">Full Name</label>
-              <input type="text" name="name" className="profile-input" placeholder="Google Name will appear here" value={userData.name} onChange={handleInput} />
+              <input type="text" name="name" className="profile-input" placeholder="Name" value={userData.name} onChange={handleInput} />
             </div>
 
             <div style={{ marginTop: "1rem" }}>

@@ -924,10 +924,10 @@ const RoadmapGeneratorUI = () => {
           "Master key frameworks/tools"
         ],
         resources: {
-          courses: ["Coursera Specializations", "Udemy Master Classes", "edX Professional Certificates"],
+          courses: ["ShikshaPlus Courses and Certifications", "Google Professional Certificates","Grow with Google Certifications", "NPTEL Courses and Certifications", "YouTube Learning Channels"],
           books: ["The Pragmatic Programmer", "Clean Code", "Design Patterns", "Refactoring"],
-          platforms: ["GitHub", "LeetCode", "Stack Overflow", "Dev.to"],
-          communities: ["Discord communities", "LinkedIn Groups", "Meetups", "Twitter Tech Spaces"]
+          platforms: ["GitHub", "Google Cloud","LeetCode", "Stack Overflow", "HackerRank"],
+          communities: ["Discord Tech communities", "LinkedIn Groups", "Meetups", "Twitter Tech Spaces","Hackathons and Tech Summits/Events"]
         }
       };
 

@@ -61,7 +61,7 @@ const About = () => {
             <li>🧠 AI Tutor with memory helps explain concepts and answer doubts</li>
             <li>👀 Webcam-based focus tracking monitors attention in real time</li>
             <li>📚 Microcourses with quizzes and certificates</li>
-            <li>🧑‍🏫 Mentor dashboard shows real learning behavior</li>
+           
           </ul>
         </div>
       </section>

@@ -82,3 +82,75 @@
   width: 18px;
   stroke: var(--text-primary);
 }
+/* ... keep your wrapper and avatar styles ... */
+
+/* The Backdrop */
+.profile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  z-index: 99;
+  /* Just below the dropdown */
+}
+
+/* Updated Dropdown */
+.profile-dropdown {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  min-width: 200px;
+  background: var(--card-bg);
+  backdrop-filter: blur(14px);
+  border-radius: 14px;
+  padding: 8px 0;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  z-index: 100;
+  animation: dropFade 0.2s ease-out;
+  overflow: hidden;
+}
+
+/* MOBILE FIX: Fixed position at bottom */
+@media (max-width: 500px) {
+  .profile-dropdown {
+    position: fixed;
+    /* Fixed to viewport, not parent */
+    top: auto;
+    bottom: 20px;
+    /* Space from bottom edge */
+    left: 20px;
+    right: 20px;
+    width: auto;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@keyframes dropFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1080,3 +1080,388 @@ body {
     margin: 0;
     letter-spacing: 0.01em;
 }
+/* ============================================
+   MOBILE RESPONSIVE ENHANCEMENTS
+============================================ */
+
+/* Base mobile-first adjustments */
+@media (max-width: 768px) {
+
+    /* Disable scroll-snap on mobile for better UX */
+    .landing-page {
+        scroll-snap-type: none;
+        height: auto;
+        overflow-y: auto;
+    }
+
+    .scroll-snap-item {
+        min-height: auto;
+        height: auto;
+        padding: 100px 0 60px;
+        scroll-snap-align: none;
+    }
+
+    /* Header adjustments */
+    .landing-header {
+        padding: 1.5rem 0;
+        height: 70px;
+    }
+
+    .landing-nav.container {
+        padding: 0 1rem;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+    }
+
+    /* Hero section mobile fixes */
+    .hero-section {
+        flex-direction: column;
+        padding-top: 80px;
+        text-align: center;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .hero-content {
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        padding: 0 0.5rem;
+    }
+
+    .hero-floating-graphic {
+        position: relative;
+        right: auto;
+        top: auto;
+        transform: none;
+        margin: 2rem auto;
+        order: 2;
+    }
+
+    .bot-image {
+        width: 280px;
+        height: 280px;
+        max-width: 90vw;
+    }
+
+    .hero-cta-btn {
+        padding: 0.9rem 2rem;
+        font-size: 1rem;
+        width: 100%;
+        max-width: 280px;
+    }
+
+    /* Features section mobile */
+    .features-section {
+        padding: 80px 0 60px;
+        height: auto;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0 1rem;
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+        margin-bottom: 2.5rem;
+        padding: 0 1rem;
+        line-height: 1.3;
+    }
+
+    .feature-card {
+        padding: 1.8rem;
+        margin: 0 0.5rem;
+    }
+
+    .feature-icon-wrapper {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 1.5rem;
+    }
+
+    .feature-icon-wrapper svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    .feature-title {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Tech stack mobile */
+    .tech-stack-section {
+        padding: 80px 0 60px;
+        height: auto;
+    }
+
+    .tech-stack-title {
+        font-size: 2.2rem;
+        padding: 0 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .marquee-wrapper {
+        padding: 15px 0;
+        margin: 0 1rem;
+    }
+
+    .tech-item {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.95rem;
+        border-radius: 50px;
+        margin: 0 0.5rem;
+    }
+
+    .marquee-content {
+        gap: 1.5rem;
+    }
+
+    /* Guest section mobile */
+    .guest-section {
+        padding: 80px 0 60px;
+        height: auto;
+    }
+
+    .guest-content {
+        padding: 0 1rem;
+    }
+
+    .section-title-light {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+        padding: 0 0.5rem;
+    }
+
+    .guest-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 2.5rem;
+        padding: 0 0.5rem;
+    }
+
+    .guest-buttons-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.2rem;
+        width: 100%;
+        padding: 0 1rem;
+    }
+
+    .guest-btn-primary,
+    .guest-btn-secondary,
+    .guest-btn-cta {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        width: 100%;
+        max-width: 280px;
+        margin: 0;
+    }
+
+    .guest-note-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+        margin: 2rem 1rem 0;
+        gap: 8px;
+    }
+
+    .guest-note-banner p {
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    /* Container adjustments */
+    .container {
+        padding: 0 1rem;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .bot-image {
+        width: 240px;
+        height: 240px;
+    }
+
+    .section-title,
+    .tech-stack-title,
+    .section-title-light {
+        font-size: 1.8rem;
+    }
+
+    .feature-card {
+        padding: 1.5rem;
+    }
+
+    .feature-title {
+        font-size: 1.3rem;
+    }
+
+    .feature-description {
+        font-size: 0.95rem;
+    }
+
+    .tech-item {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    .guest-subtitle {
+        font-size: 1rem;
+    }
+
+    /* Touch-friendly button sizing */
+    .hero-cta-btn,
+    .guest-btn-primary,
+    .guest-btn-secondary,
+    .guest-btn-cta {
+        min-height: 48px;
+        /* Minimum touch target size */
+        padding: 0.8rem 1.5rem;
+    }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .hero-content {
+        margin-left: 5%;
+        max-width: 500px;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+    }
+
+    .bot-image {
+        width: 320px;
+        height: 320px;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        padding: 0 2rem;
+    }
+
+    .guest-buttons-container {
+        flex-wrap: wrap;
+    }
+
+    .guest-btn-primary,
+    .guest-btn-secondary {
+        flex: 1;
+        min-width: 200px;
+    }
+}
+
+/* Landscape orientation fixes */
+@media (max-height: 600px) and (orientation: landscape) {
+    .hero-section {
+        min-height: 120vh;
+        padding-top: 70px;
+    }
+
+    .hero-title {
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .hero-subtitle {
+        margin-bottom: 1.5rem;
+        font-size: 1rem;
+    }
+
+    .bot-image {
+        width: 200px;
+        height: 200px;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .feature-card {
+        padding: 1.5rem;
+    }
+}
+
+/* Large desktop adjustments */
+@media (min-width: 1440px) {
+    .container {
+        max-width: 1400px;
+    }
+
+    .hero-title {
+        font-size: 4.5rem;
+    }
+
+    .bot-image {
+        width: 450px;
+        height: 450px;
+    }
+}
+
+/* Fix for iOS Safari 100vh issue */
+@supports (-webkit-touch-callout: none) {
+
+    .scroll-snap-item,
+    .hero-section,
+    .features-section,
+    .tech-stack-section,
+    .guest-section {
+        min-height: -webkit-fill-available;
+    }
+
+    .landing-page {
+        height: -webkit-fill-available;
+    }
+}
+
+/* Prevent text size adjustment on mobile */
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+/* Improve touch scrolling on mobile */
+.landing-page {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Optimize animations for mobile */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

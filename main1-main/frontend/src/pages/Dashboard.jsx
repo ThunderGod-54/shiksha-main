@@ -184,6 +184,105 @@ const dashboardPageStyles = `
 .react-calendar__tile { color: var(--text-primary); }
 .react-calendar__tile--active { background: var(--violet-primary) !important; color: white; }
 .react-calendar__navigation button { color: var(--text-primary); }
+/* ================================
+   RESPONSIVE DESIGN
+================================ */
+
+/* -------- Tablets (<= 1024px) -------- */
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dash-welcome {
+    grid-column: span 2;
+  }
+
+  .dash-calendar {
+    grid-column: span 2;
+    grid-row: auto;
+  }
+
+  .dashboard-main {
+    padding: 1.5rem;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+  }
+}
+
+/* -------- Mobile (<= 768px) -------- */
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-welcome,
+  .dash-calendar,
+  .dash-performance,
+  .dash-my-visit {
+    grid-column: span 1;
+    grid-row: auto;
+  }
+
+  .dashboard-main {
+    padding: 1rem;
+  }
+
+  .dash-card {
+    padding: 1.2rem;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .card-subtitle {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+
+  /* Bar chart fix */
+  .bar-chart-container {
+    height: 140px;
+  }
+
+  /* Doughnut charts stack */
+  .doughnut-charts-container {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .doughnut-chart {
+    width: 85px;
+    height: 85px;
+  }
+
+  /* Calendar */
+  .react-calendar {
+    font-size: 0.85rem;
+  }
+}
+
+/* -------- Small Mobile (<= 480px) -------- */
+@media (max-width: 480px) {
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .quiz-option-btn {
+    font-size: 0.9rem;
+    padding: 0.7rem;
+  }
+
+  .dashboard-page::before,
+  .dashboard-page::after {
+    display: none; /* remove heavy blur effects on small phones */
+  }
+}
 `;
 
 const Dashboard = () => {
@@ -384,5 +483,4 @@ const Dashboard = () => {
     </>
   );
 };
-
 export default Dashboard;

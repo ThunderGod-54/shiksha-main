@@ -171,11 +171,7 @@ const Landing = () => {
 
   return (
     <div className="landing-page">
-      <header className="landing-header">
-        <nav className="landing-nav container">
-          <h1 className="logo">SHIKSHA<span className="logo-span"> PLUS</span></h1>
-        </nav>
-      </header>
+      
 
       {/* 1. Hero Section */}
       <section className="hero-section container scroll-snap-item" ref={heroContentRef}>

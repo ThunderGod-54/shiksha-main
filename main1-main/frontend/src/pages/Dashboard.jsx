@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
 const dashboardPageStyles = `
 .dashboard-page {
@@ -89,9 +91,11 @@ const dashboardPageStyles = `
 }
 
 .card-subtitle {
-  font-size: .9rem;
-  color: var(--text-secondary);
+  font-size: 1.9rem;
+  color: var(--text-primary);
   margin-bottom: 1.5rem;
+  align-self: center;
+
 }
 
 /* Bento Placement */
@@ -237,12 +241,79 @@ const dashboardPageStyles = `
   to { transform: rotate(0); opacity: 1; }
 }
 
+/* Calendar Styles */
+.react-calendar {
+  width: 100%;
+  max-width: 100%;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+}
+
+.react-calendar__tile {
+  color: var(--text-primary);
+  background: transparent;
+}
+
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background-color: var(--blue-primary);
+  color: white;
+}
+
+.react-calendar__tile--active {
+  background: var(--violet-primary);
+  color: white;
+}
+
+.react-calendar__tile--now {
+  background: var(--blue-secondary);
+  color: white;
+}
+
+.react-calendar__navigation button {
+  color: var(--text-primary);
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: var(--blue-primary);
+  color: white;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  color: var(--text-secondary);
+}
+
 /* Responsive */
 @media(max-width:1150px) { .dashboard-grid { grid-template-columns: repeat(2,1fr); } }
 @media(max-width:700px) { .dashboard-grid { grid-template-columns:1fr; } }
 `;
 
 const Dashboard = () => {
+  const inspirationalQuotes = [
+    "The only way to do great work is to love what you do. – Steve Jobs",
+    "Believe you can and you're halfway there. – Theodore Roosevelt",
+    "The future belongs to those who believe in the beauty of their dreams. – Eleanor Roosevelt",
+    "You miss 100% of the shots you don't take. – Wayne Gretzky",
+    "The best way to predict the future is to create it. – Peter Drucker",
+    "Don't watch the clock; do what it does. Keep going. – Sam Levenson",
+    "The only limit to our realization of tomorrow will be our doubts of today. – Franklin D. Roosevelt",
+    "Success is not final, failure is not fatal: It is the courage to continue that counts. – Winston Churchill",
+    "Your time is limited, so don't waste it living someone else's life. – Steve Jobs",
+    "The way to get started is to quit talking and begin doing. – Walt Disney"
+  ];
+
+  const [currentQuote, setCurrentQuote] = useState(inspirationalQuotes[0]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentQuote(inspirationalQuotes[Math.floor(Math.random() * inspirationalQuotes.length)]);
+    }, 5000); // Change every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   const performanceData = [
     { label: "Algo", value: 85 },
     { label: "OOP", value: 64 },
@@ -274,13 +345,14 @@ const Dashboard = () => {
             {/* Welcome */}
             <div className="dash-card dash-welcome">
               <h2 className="card-title">Welcome Back!</h2>
-              <p className="card-subtitle">Here’s your learning snapshot for today 📊</p>
+              <p className="card-subtitle">{currentQuote}</p>
             </div>
 
             {/* Calendar */}
             <div className="dash-card dash-calendar">
               <h2 className="card-title">Calendar</h2>
-              <p className="card-subtitle">Upcoming Classes & Schedule</p>
+              <p className="card-subtitle"><b>Calender</b></p>
+              <Calendar />
             </div>
 
             {/* Performance */}

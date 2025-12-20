@@ -75,17 +75,17 @@ export default function ProfileDropdown() {
             {theme === "light" ? (
               <>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" strokeWidth="2" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="5" />
-                  <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
-                </svg>
-                Light Mode
-              </>
-            ) : (
-              <>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" strokeWidth="2" viewBox="0 0 24 24">
                   <path d="M21 12.79A9 9 0 0 1 11.21 3C11 3 11 3 11 3a9 9 0 1 0 9.79 9.79c.21-.33-.23-.78-.78-.78Z" />
                 </svg>
                 Dark Mode
+              </>
+            ) : (
+              <>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" strokeWidth="2" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="5" />
+                    <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
+                  </svg>
+                Light Mode
               </>
             )}
           </div>

@@ -77,7 +77,8 @@ const dashboardPageStyles = `
   margin-bottom: .4rem;
   background: linear-gradient(135deg, var(--blue-primary), var(--violet-primary));
   -webkit-background-clip: text;
-  color: transparent;
+  color: var(--card-title);
+  align-self: center;
 }
 
 .card-subtitle {
@@ -314,17 +315,17 @@ const Dashboard = () => {
         <main className="dashboard-main">
           <div className="dashboard-grid">
             <div className="dash-card dash-welcome">
-              <h2 className="card-title">Welcome Back!</h2>
+              <h2 className="card-title">Quotes</h2>
               <p className="card-subtitle" style={{ fontSize: "1.1rem" }}>{currentQuote}</p>
             </div>
 
             <div className="dash-card dash-calendar">
-              <div className="">Calendar</div>
+              <div className="card-title">Calendar</div>
               <Calendar />
             </div>
 
             <div className="dash-card dash-performance">
-              <div>long chart</div>
+              <div className="card-title">long chart</div>
               <div className="bar-chart-container">
 
                 {performanceData.map((item) => (
@@ -334,7 +335,7 @@ const Dashboard = () => {
             </div>
 
             <div className="dash-card dash-my-visit">
-              <div>Round chart</div>
+              <div className="card-title">Round chart</div>
               <div className="doughnut-charts-container">
                 {visitData.map((item) => (
                   <div className="doughnut-chart-wrapper" key={item.label}>
@@ -348,14 +349,14 @@ const Dashboard = () => {
             </div>
 
             <div className="dash-card">
-              <div >Streak & Consistency</div>
+              <div className="card-title">Streak & Consistency</div>
               <p style={{ fontSize: "1.1rem", marginTop: "10px" }}>🔥 <b>{getStudyStreak()}</b> Day Streak</p>
               <p style={{ marginTop: "6px", color: "gray" }}>📅 Last Active: <b>{getLastActiveText()}</b></p>
               <p style={{ marginTop: "6px" }}>🎯 Weekly Consistency: <b>{getWeeklyConsistency()}%</b></p>
             </div>
 
             <div className="dash-card">
-              <div>Learning Momentum</div>
+              <div className="card-title">Learning Momentum</div>
               {(() => {
                 const m = getLearningMomentum();
                 return (
@@ -369,7 +370,7 @@ const Dashboard = () => {
             </div>
 
             <div className="dash-card dash-quiz">
-              <div className="">Quick Quiz</div>
+              <div className="card-title">Quick Quiz</div>
               <p>Which is the capital of Japan?</p>
               <div className="quiz-options">
                 <button className="quiz-option-btn">A) Beijing</button>

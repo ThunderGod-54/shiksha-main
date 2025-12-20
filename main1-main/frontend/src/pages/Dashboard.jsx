@@ -319,13 +319,14 @@ const Dashboard = () => {
             </div>
 
             <div className="dash-card dash-calendar">
-              <h2 className="card-title">Calendar</h2>
+              <div className="">Calendar</div>
               <Calendar />
             </div>
 
             <div className="dash-card dash-performance">
-              <h2 className="card-title">Performance</h2>
+              <div>long chart</div>
               <div className="bar-chart-container">
+
                 {performanceData.map((item) => (
                   <div key={item.label} className="bar-chart-bar" style={{ height: `${item.value}%` }} title={`${item.label}: ${item.value}%`}></div>
                 ))}
@@ -333,7 +334,7 @@ const Dashboard = () => {
             </div>
 
             <div className="dash-card dash-my-visit">
-              <h2 className="card-title">My Visit</h2>
+              <div>Round chart</div>
               <div className="doughnut-charts-container">
                 {visitData.map((item) => (
                   <div className="doughnut-chart-wrapper" key={item.label}>
@@ -347,14 +348,14 @@ const Dashboard = () => {
             </div>
 
             <div className="dash-card">
-              <h2 className="card-title">Streak & Consistency</h2>
+              <div >Streak & Consistency</div>
               <p style={{ fontSize: "1.1rem", marginTop: "10px" }}>🔥 <b>{getStudyStreak()}</b> Day Streak</p>
               <p style={{ marginTop: "6px", color: "gray" }}>📅 Last Active: <b>{getLastActiveText()}</b></p>
               <p style={{ marginTop: "6px" }}>🎯 Weekly Consistency: <b>{getWeeklyConsistency()}%</b></p>
             </div>
 
             <div className="dash-card">
-              <h2 className="card-title">Learning Momentum</h2>
+              <div>Learning Momentum</div>
               {(() => {
                 const m = getLearningMomentum();
                 return (
@@ -368,7 +369,7 @@ const Dashboard = () => {
             </div>
 
             <div className="dash-card dash-quiz">
-              <h2 className="card-title">Quick Quiz</h2>
+              <div className="">Quick Quiz</div>
               <p>Which is the capital of Japan?</p>
               <div className="quiz-options">
                 <button className="quiz-option-btn">A) Beijing</button>

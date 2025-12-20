@@ -173,7 +173,7 @@ const Landing = () => {
     <div className="landing-page">
       <header className="landing-header">
         <nav className="landing-nav container">
-          <h1 className="logo">Shiksha<span className="logo-span">Plus</span></h1>
+          <h1 className="logo">SHIKSHA<span className="logo-span"> PLUS</span></h1>
         </nav>
       </header>
 

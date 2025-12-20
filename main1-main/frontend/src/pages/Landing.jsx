@@ -285,7 +285,7 @@ const Landing = () => {
           <p className="guest-subtitle">Zero friction. Pure exploration. Experience ShikshaPlus as our guest.</p>
           <div className="guest-buttons-container">
             <button onClick={() => navigate('/dashboard')} className="guest-btn-primary">Student Dashboard</button>
-            <button onClick={() => navigate('/mentor-dashboard')} className="guest-btn-secondary">Mentor Dashboard</button>
+            <button onClick={() => navigate('/mentor-dashboard')} className="guest-btn-secondary">Teacher Dashboard</button>
             <button onClick={() => navigate('/auth')} className="guest-btn-cta">Create Free Account</button>
           </div>
           <br></br>

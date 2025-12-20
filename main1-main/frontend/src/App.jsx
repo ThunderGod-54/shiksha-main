@@ -15,7 +15,7 @@ import MentorDashboard from "./pages/MentorDashboard";
 import Profile from "./pages/Profile";
 import OnboardingForm from "./components/OnboardingForm";
 import DistractionMonitor from "./pages/DistractionMonitor";
-
+import Notes from "./pages/Notes";
 import "./App.css";
 
 function App() {
@@ -64,6 +64,7 @@ function App() {
 
           {/* User */}
           <Route path="/profile" element={<Profile />} />
+          <Route path="/notes" element={<Notes />} />
         </Routes>
       </main>
 

@@ -151,20 +151,45 @@ greet('World');`,
           title: 'Object-Oriented Programming',
           videoUrl: 'https://youtu.be/eIrMbAQSU34',
           description: 'Understanding classes, objects, and OOP concepts.',
-          code: `public class Person {
-    private String name;
-    private int age;
+          code: `class Student {
+    int id;
+    String name;
 
-    public Person(String name, int age) {
-        this.name = name;
-        this.age = age;
+    // Constructor with no parameters
+    Student() {
+        id = 0;
+        name = "Not Assigned";
     }
 
-    public void display() {
-        System.out.println("Name: " + name + ", Age: " + age);
+    // Constructor with one parameter
+    Student(int i) {
+        id = i;
+        name = "Unknown";
+    }
+
+    // Constructor with two parameters
+    Student(int i, String n) {
+        id = i;
+        name = n;
+    }
+
+    void display() {
+        System.out.print("ID: " + id + ", Name: " + name);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Student s1 = new Student();
+        Student s2 = new Student(101);
+        Student s3 = new Student(102, "Ravi");
+
+        s1.display();
+        s2.display();
+        s3.display();
     }
 }`,
-          expectedOutput: 'Person class defined'
+          expectedOutput: 'ID: 0, Name: Not Assigned ID: 101, Name: Unknown ID: 102, Name: Ravi'
         },
         {
           title: 'Exception Handling',

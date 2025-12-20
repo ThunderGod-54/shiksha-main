@@ -255,8 +255,8 @@ const Landing = () => {
       {/* 3. Tech Stack Section */}
       <section className="tech-stack-section scroll-snap-item" ref={techStackRef}>
         <div className="container">
-          <h3 className="tech-stack-title" style={{ opacity: 0 }}>Built With a Modern Stack</h3>
-          <p>Crafted with Modern technologies which power todays latest apps and websites.</p>
+          <h3 className="tech-stack-title" style={{ opacity: 0 }}>Modern Tech. Real Impact.</h3>
+          <p>Crafted by Google-powered tools and modern frameworks</p>
           <br></br>
           <div className="marquee-wrapper" style={{ opacity: 0 }}>
             <div className="marquee-content">

@@ -3,32 +3,32 @@ import "./about.css";
 
 const teamMembers = [
   {
-    name: "Rishabh",
+    name: "Rishabh K",
     role: "Team Lead & Full-Stack Developer",
     description:
       "Leads development, integrates features, and ensures smooth end-to-end delivery.",
-    avatar: "https://api.dicebear.com/7.x/fun-emoji/svg?seed=Rishabh",
+    avatar: "https://i.pinimg.com/736x/9e/c0/f8/9ec0f877571edc437f89c15c08081533.jpg",
   },
   {
     name: "Sammed P",
     role: "Frontend & OpenCV Integration",
     description:
       "Crafts the UI and handles real-time face tracking with OpenCV and MediaPipe.",
-    avatar: "https://api.dicebear.com/7.x/fun-emoji/svg?seed=Sammed",
+    avatar: "https://i.pinimg.com/736x/4a/a5/05/4aa5058055bb5592cd3d756b00766915.jpg",
   },
   {
-    name: "Pruthviraj",
+    name: "Pruthviraj K",
     role: "Business Model & Data Research",
     description:
       "Designs the business strategy and curates data for impactful learning modules.",
-    avatar: "https://api.dicebear.com/7.x/fun-emoji/svg?seed=Pruthviraj",
+    avatar: "https://i.pinimg.com/736x/82/42/ef/8242ef800f969ab9e2aac7a90716e56e.jpg",
   },
   {
-    name: "Rahul",
+    name: "Rahul K",
     role: "API Integration & UI/UX",
     description:
       "Connects backend APIs and refines the user experience for seamless interaction.",
-    avatar: "https://api.dicebear.com/7.x/fun-emoji/svg?seed=Rahul",
+    avatar: "https://i.pinimg.com/736x/f4/07/5d/f4075d3fdfdf01e3162a845403fdce5f.jpg",
   },
 ];
 

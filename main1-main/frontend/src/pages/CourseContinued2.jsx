@@ -240,7 +240,7 @@ print(f"5 + 3 = {result}")`,
 
   const course = courseData[courseId];
 
-  if (!course) return <h1>Course Not Found</h1>;
+  if (!course) return <h1>Under Construction..</h1>;
 
   const currentLesson = course.lessons[selectedLesson];
 

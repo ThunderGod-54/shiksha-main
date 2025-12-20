@@ -429,7 +429,7 @@ const [isSignUp, setIsSignUp] = useState(false);
                 onChange={(e) => setUserType(e.target.value)}
                 disabled={loading}
               />
-              <label htmlFor="user-mentor">Mentor</label>
+              <label htmlFor="user-mentor">Teacher</label>
             </div>
           </div>
 

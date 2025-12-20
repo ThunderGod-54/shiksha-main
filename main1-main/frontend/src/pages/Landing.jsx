@@ -201,6 +201,7 @@ const Landing = () => {
       <section className="features-section scroll-snap-item" ref={featuresRef}>
         <div className="container">
           <h3 className="section-title" style={{ opacity: 0 }}>Everything You Need to Succeed</h3>
+          <p>What ShikshaPlus Offers..?</p><br></br>
           <div className="features-grid">
             {[
               {
@@ -255,7 +256,7 @@ const Landing = () => {
       <section className="tech-stack-section scroll-snap-item" ref={techStackRef}>
         <div className="container">
           <h3 className="tech-stack-title" style={{ opacity: 0 }}>Built With a Modern Stack</h3>
-          <p fontsize="60">Crafted with Modern technologies which power todays latest apps and websites.</p>
+          <p>Crafted with Modern technologies which power todays latest apps and websites.</p>
           <br></br>
           <div className="marquee-wrapper" style={{ opacity: 0 }}>
             <div className="marquee-content">

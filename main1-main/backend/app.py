@@ -18,15 +18,16 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['SECRET_KEY'] = "hackathon-secret-key" 
 CERT_FOLDER = "certificates"
 os.makedirs(CERT_FOLDER, exist_ok=True)
+import os
+import json
 
-# Find the folder where app.py is located for reliable pathing on Vercel
+# Correct way to find the file relative to app.py
 base_dir = os.path.dirname(os.path.abspath(__file__))
 key_path = os.path.join(base_dir, "serviceAccountKey.json")
 
 # Initialize Firebase
 cred = credentials.Certificate(key_path)
 firebase_admin.initialize_app(cred)
-
 # In-memory storage (UID as key)
 # Note: In-memory data clears on Vercel restarts. 
 # For long-term storage, use Firebase Firestore.

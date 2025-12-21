@@ -1,4 +1,5 @@
 {
+    "version": 2,
     "builds": [
         {
             "src": "app.py",
@@ -8,10 +9,10 @@
             }
         }
     ],
-    "rewrites": [
+    "routes": [
         {
-            "source": "/(.*)",
-            "destination": "app.py"
+            "src": "/(.*)",
+            "dest": "app.py"
         }
     ]
 }

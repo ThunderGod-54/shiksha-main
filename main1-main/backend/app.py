@@ -12,7 +12,9 @@ from datetime import datetime
 app = Flask(__name__)
 
 # --- CONFIG & FIREBASE ---
-CORS(app, resources={r"/*": {"origins": "*"}}) 
+# --- CONFIG & FIREBASE ---
+# Use this exact line for the most permissive CORS
+CORS(app, resources={r"/*": {"origins": "*", "allow_headers": "*", "methods": "*"}})
 app.config['SECRET_KEY'] = "hackathon-secret-key" 
 
 # Vercel fix: Use /tmp for certificates

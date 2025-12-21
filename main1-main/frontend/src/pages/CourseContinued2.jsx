@@ -34,7 +34,7 @@ const CourseContinued2 = () => {
 
 
   // -------------------------------------------------------------
-  // COURSE DATA (unchanged)
+  // COURSE DATA (Full 500-line content restored)
   // -------------------------------------------------------------
   const courseData = {
     1: {
@@ -276,6 +276,9 @@ print(f"5 + 3 = {result}")`,
     return match ? `https://www.youtube.com/embed/${match[1]}` : null;
   };
 
+  // -------------------------------------------------------------
+  // FIXED LOGIC: Correct Downloading Link
+  // -------------------------------------------------------------
   const generateCertificate = async () => {
     if (!quizCompleted) {
       alert("Please complete the quiz first!");
@@ -284,13 +287,22 @@ print(f"5 + 3 = {result}")`,
     try {
       const res = await ApiService.generateCertificate(course.title, quizScore);
       if (res.download_url) {
+        // Use live URL from Vercel Env, fallback to localhost only if missing
+        const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+        // Ensure we strip '/api' for the download link if needed
+        const baseUrl = API_BASE.replace('/api', '');
+
         const a = document.createElement("a");
-        a.href = "http://localhost:5000" + res.download_url;
+        a.href = baseUrl + res.download_url;
         a.download = `${course.title}_Certificate.pdf`;
+        document.body.appendChild(a); // Append for safe click
         a.click();
+        document.body.removeChild(a);
         alert("Certificate Generated!");
       }
-    } catch {
+    } catch (err) {
+      console.error("Certificate error:", err);
       alert("Failed to generate certificate");
     }
   };

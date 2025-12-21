@@ -1,6 +1,8 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// LOGIC: Ensure the URL never ends with a trailing slash to avoid double slashes like //auth/login
+const RAW_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = RAW_URL.endsWith('/') ? RAW_URL.slice(0, -1) : RAW_URL;
 
 class ApiService {
   constructor() {
@@ -21,9 +23,10 @@ class ApiService {
   }
 
   async request(endpoint, options = {}) {
-    const url = `${API_BASE_URL}${endpoint}`;
+    // LOGIC: Ensure endpoint always starts with a slash for consistent URL building
+    const formattedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+    const url = `${API_BASE_URL}${formattedEndpoint}`;
 
-    // Ensure headers are properly merged
     const headers = { ...this.getAuthHeaders() };
     if (options.headers) {
       Object.assign(headers, options.headers);
@@ -34,7 +37,6 @@ class ApiService {
       headers,
     };
 
-    // Add body if it exists (but not for GET requests)
     if (options.body && typeof options.body !== 'string') {
       config.body = JSON.stringify(options.body);
     }
@@ -100,7 +102,7 @@ class ApiService {
     });
   }
 
-  // === AI ENDPOINTS ===
+  // === AI ENDPOINTS (Note: Ensure these routes exist in your backend if used) ===
 
   async aiChat(message, sessionId = null, context = null) {
     return await this.request('/ai/chat', {

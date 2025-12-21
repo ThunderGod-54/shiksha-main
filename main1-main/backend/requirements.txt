@@ -3,5 +3,4 @@ flask-cors
 fpdf
 qrcode
 firebase-admin
-google-generativeai
 pillow

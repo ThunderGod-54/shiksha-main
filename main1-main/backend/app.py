@@ -466,4 +466,4 @@ def download_certificate(filename):
     return send_file(path, as_attachment=True) if os.path.exists(path) else (jsonify({"error": "Not found"}), 404)
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run()

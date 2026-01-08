@@ -4,7 +4,7 @@ import './aichatbot.css';
 
 // --- INITIALIZE REAL AI ---
 // REPLACE WITH YOUR REAL GEMINI API KEY
-const GEMINI_API_KEY = "AIzaSyAljdrZ03Z6jEeKSY8_t4wJgvECXMo5PYA";
+const GEMINI_API_KEY = "your api key";
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
